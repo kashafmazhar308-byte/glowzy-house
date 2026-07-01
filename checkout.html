@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Checkout | Glowzy House</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+<nav class="navbar">
+
+<a href="index.html" class="logo">Glowzy House</a>
+
+<ul class="nav-menu">
+
+<li><a href="index.html">Home</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="contact.html">Contact</a></li>
+
+</ul>
+
+<div class="nav-icons">
+
+<a href="cart.html">
+<i class="fa-solid fa-cart-shopping"></i>
+<span class="cart-count">0</span>
+</a>
+<a href="wishlist.html" class="wishlist-icon">
+
+    <i class="fa-solid fa-heart"></i>
+
+    <span class="wishlist-count">0</span>
+
+</a>
+
+</div>
+
+</nav>
+
+</header>
+
+<section class="checkout-hero">
+
+<h1>Checkout</h1>
+
+<p>Complete your order details</p>
+
+</section>
+
+<section class="checkout-section">
+
+<div class="checkout-form">
+
+<h2>Billing Details</h2>
+
+<form id="checkoutForm">
+
+<input type="text" id="name" placeholder="Full Name" required>
+
+<input type="tel" id="phone" placeholder="Phone Number" required>
+
+<input type="email" id="email" placeholder="Email Address">
+
+<textarea id="address" placeholder="Delivery Address" required></textarea>
+
+<!-- Payment Method -->
+
+<h3 class="payment-title">Payment Method</h3>
+
+<div class="payment-method">
+
+    <label>
+        <input type="radio" name="payment" value="Cash on Delivery" checked>
+        Cash on Delivery
+    </label>
+
+    <label>
+        <input type="radio" name="payment" value="SadaPay">
+        SadaPay
+    </label>
+
+</div>
+
+<div id="bankDetails" class="bank-details" style="display:none;">
+
+    <h4>SadaPay Details</h4>
+
+    <p><strong>Account Title:</strong> Glowzy House</p>
+
+    <p><strong>SadaPay Number:</strong> 03161440430</p>
+
+    <p><strong>IBAN:</strong> PK10SADA0000003161440430</p>
+
+    <p style="color:#d4af37;">
+        Please complete the payment and send the screenshot on WhatsApp after placing your order.
+    </p>
+
+</div>
+
+<button type="submit" class="place-order">
+    Place Order
+</button>
+
+</form>
+
+</div>
+
+<div class="order-summary">
+
+<h2>Your Order</h2>
+
+<div id="checkout-items"></div>
+
+<h3>Total: <span id="checkout-total">Rs.0</span></h3>
+
+</div>
+
+</section>
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-box">
+
+            <h2>Glowzy House</h2>
+
+            <p>
+                Luxury gift hampers crafted with elegance, love and premium
+                packaging for every special occasion.
+            </p>
+            </div>
+
+ <div class="footer-box">
+
+            <h3>Delivery</h3>
+
+            <p>Lahore, Pakistan</p>
+
+
+            <p>Premium Gift Wrapping</p>
+
+        </div>
+        
+
+        <div class="footer-box">
+
+            <h3>Quick Links</h3>
+
+            <a href="index.html">Home</a>
+
+            <a href="shop.html">Shop</a>
+
+            <a href="about.html">About</a>
+
+            <a href="contact.html">Contact</a>
+
+        </div>
+ 
+        <div class="footer-box">
+
+            <h3>Follow Us</h3>
+
+            <div class="social-icons">
+
+                <a href="https://www.instagram.com/glowzy_house?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fa-brands fa-instagram"></i></a>
+
+                <a href="https://www.facebook.com/glowzyhouse"><i class="fa-brands fa-facebook-f"></i></a>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <p>© 2026 Glowzy House. All Rights Reserved.</p>
+
+    </div>
+
+</footer>
+<div id="toast" class="toast"></div>
+
+<script src="js/script.js"></script>
+<script src="js/checkout.js"></script>
+
+</body>
+</html>

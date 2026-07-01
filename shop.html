@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shop | Glowzy House</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header>
+
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            Glowzy House
+        </a>
+
+        <ul class="nav-menu">
+
+            <li><a href="index.html">Home</a></li>
+
+            <li><a class="active" href="shop.html">Shop</a></li>
+
+            <li><a href="about.html">About</a></li>
+
+            <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+
+        <div class="nav-icons">
+
+            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+
+            <a href="cart.html" class="cart-icon">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span class="cart-count">0</span>
+
+            </a>
+<a href="wishlist.html" class="wishlist-icon">
+
+    <i class="fa-solid fa-heart"></i>
+
+    <span class="wishlist-count">0</span>
+
+</a>
+        </div>
+
+    </nav>
+
+</header>
+
+<!-- ================= SHOP HERO ================= -->
+
+<section class="shop-hero">
+
+    <div class="shop-overlay">
+
+        <h1>Luxury Gift Hampers</h1>
+
+        <p>Elegant gift baskets designed for every special occasion.</p>
+
+    </div>
+
+</section>
+
+<!-- SEARCH + SORT -->
+<section class="shop-toolbar">
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search your favourite hamper..."
+        >
+
+        <button type="button">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </div>
+
+    <select id="sortProducts">
+        <option value="default">Sort By</option>
+        <option value="low-high">Price: Low → High</option>
+        <option value="high-low">Price: High → Low</option>
+        <option value="name">Name (A-Z)</option>
+    </select>
+
+</section>
+
+<!-- ================= CATEGORIES ================= -->
+
+<section class="shop-categories">
+
+    <button class="active">All</button>
+
+    <button>Birthday</button>
+
+    <button>Wedding</button>
+
+    <button>Anniversary</button>
+
+    <button>Baby</button>
+
+    <button>Corporate</button>
+
+</section>
+<!-- ================= PRODUCTS ================= -->
+
+<section class="products">
+
+<div class="product-grid">
+  <div class="product-card"
+     data-name="Luxury Gift Hamper"
+     data-category="birthday anniversary">
+
+<div class="product-image">
+
+<img src="images/basket1.jpg" alt="Luxury Hamper">
+
+<span class="badge">Best Seller</span>
+
+<i class="fa-regular fa-heart wishlist"></i>
+
+</div>
+
+<div class="product-info">
+
+<h3>Luxury Gift Hamper</h3>
+
+<p class="rating">
+★★★★★ (24 Reviews)
+</p>
+
+<h4>Rs. 2,499</h4>
+
+<div class="product-buttons">
+
+<a href="#" class="view-btn">
+
+View Details
+
+</a>
+
+<button class="cart-btn"
+data-name="Luxury Gift Hamper"
+data-price="2499"
+data-image="images/basket1.jpg">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+        <!-- Product 2 -->
+        <div class="product-card"
+     data-name="Chocolate Hamper"
+     data-category="corporate">
+
+            <div class="product-image">
+
+                <img src="images/basket2.jpg" alt="Chocolate Hamper">
+
+                <span class="badge">Popular</span>
+
+                <i class="fa-regular fa-heart wishlist"></i>
+
+            </div>
+
+            <div class="product-info">
+
+                <h3>Chocolate Hamper</h3>
+
+                <p class="rating">★★★★★ (18 Reviews)</p>
+
+                <h4>Rs. 3,499</h4>
+
+                <div class="product-buttons">
+
+                    <a href="#" class="view-btn">View Details</a>
+
+                    <button class="cart-btn"
+                        data-name="Chocolate Hamper"
+                        data-price="3499"
+                        data-image="images/basket2.jpg">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Product 3 -->
+
+    <div class="product-card" data-category="birthday">
+            <div class="product-image">
+
+                <img src="images/basket3.jpg" alt="Birthday Hamper">
+
+                <span class="badge">New</span>
+
+                <i class="fa-regular fa-heart wishlist"></i>
+
+            </div>
+
+            <div class="product-info">
+
+                <h3>Birthday Hamper</h3>
+
+                <p class="rating">★★★★★ (12 Reviews)</p>
+
+                <h4>Rs. 7,499</h4>
+
+                <div class="product-buttons">
+
+                    <a href="#" class="view-btn">View Details</a>
+
+                    <button class="cart-btn"
+                        data-name="Birthday Hamper"
+                        data-price="7499"
+                        data-image="images/basket3.jpg">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card"
+            data-name="Baby Gift Basket"
+            data-category="baby">
+
+    <div class="product-image">
+
+        <img src="images/basket4.jpg" alt="Baby Gift Basket">
+
+        <span class="badge">New</span>
+
+        <i class="fa-regular fa-heart wishlist"></i>
+
+    </div>
+
+    <div class="product-info">
+
+        <h3>Baby Gift Basket</h3>
+
+        <p class="rating">★★★★★ (15 Reviews)</p>
+
+        <h4>Rs. 4,299</h4>
+
+        <div class="product-buttons">
+
+            <a href="#" class="view-btn">View Details</a>
+
+            <button class="cart-btn"
+                data-name="Baby Gift Basket"
+                data-price="4299"
+                data-image="images/basket4.jpeg">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Product 5 -->
+    <div class="product-card"
+    data-name="Coffee Lover Basket"
+    data-category="corporate">
+
+    <div class="product-image">
+
+        <img src="images/basket5.jpg" alt="Coffee Lover Basket">
+
+        <span class="badge">Popular</span>
+
+        <i class="fa-regular fa-heart wishlist"></i>
+
+    </div>
+
+    <div class="product-info">
+
+        <h3>Coffee Lover Basket</h3>
+
+        <p class="rating">★★★★★ (21 Reviews)</p>
+
+        <h4>Rs. 5,199</h4>
+
+        <div class="product-buttons">
+
+            <a href="#" class="view-btn">View Details</a>
+
+            <button class="cart-btn"
+                data-name="Coffee Lover Basket"
+                data-price="5199"
+                data-image="images/basket5.jpeg">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Product 6 -->
+<div class="product-card"
+    data-name="Wedding Hamper"
+    data-category="wedding">
+    <div class="product-image">
+
+        <img src="images/basket6.jpg" alt="Wedding Hamper">
+
+        <span class="badge">Best Seller</span>
+
+        <i class="fa-regular fa-heart wishlist"></i>
+
+    </div>
+
+    <div class="product-info">
+
+        <h3>Wedding Hamper</h3>
+
+        <p class="rating">★★★★★ (30 Reviews)</p>
+
+        <h4>Rs. 8,999</h4>
+
+        <div class="product-buttons">
+
+            <a href="#" class="view-btn">View Details</a>
+
+            <button class="cart-btn"
+                data-name="Wedding Hamper"
+                data-price="8999"
+                data-image="images/basket6.jpeg">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Product 7 -->
+<div class="product-card"
+     data-name="Luxury Flower Basket"
+     data-category="anniversary">
+
+    <div class="product-image">
+
+        <img src="images/basket7.jpg" alt="Luxury Flower Basket">
+
+        <span class="badge">Luxury</span>
+
+        <i class="fa-regular fa-heart wishlist"></i>
+
+    </div>
+
+    <div class="product-info">
+
+        <h3>Luxury Flower Basket</h3>
+
+        <p class="rating">★★★★★ (17 Reviews)</p>
+
+        <h4>Rs. 6,499</h4>
+
+        <div class="product-buttons">
+
+            <a href="#" class="view-btn">View Details</a>
+
+            <button class="cart-btn"
+                data-name="Luxury Flower Basket"
+                data-price="6499"
+                data-image="images/basket7.jpeg">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Product 8 -->
+<div class="product-card"
+    data-name="Premium Surprise Box"
+    data-category="premium">
+
+    <div class="product-image">
+
+        <img src="images/basket8.jpeg" alt="Premium Surprise Box">
+
+        <span class="badge">Premium</span>
+
+        <i class="fa-regular fa-heart wishlist"></i>
+
+    </div>
+
+    <div class="product-info">
+
+        <h3>Premium Surprise Box</h3>
+
+        <p class="rating">★★★★★ (26 Reviews)</p>
+
+        <h4>Rs. 9,499</h4>
+
+        <div class="product-buttons">
+
+            <a href="#" class="view-btn">View Details</a>
+
+            <button class="cart-btn"
+                data-name="Premium Surprise Box"
+                data-price="9499"
+                data-image="images/basket8.jpeg">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-box">
+
+            <h2>Glowzy House</h2>
+
+            <p>
+                Luxury gift hampers crafted with elegance and love for every
+                special occasion.
+            </p>
+
+        </div>
+
+        <div class="footer-box">
+
+            <h3>Quick Links</h3>
+
+            <a href="index.html">Home</a>
+
+            <a href="shop.html">Shop</a>
+
+            <a href="about.html">About</a>
+
+            <a href="contact.html">Contact</a>
+
+        </div>
+
+        <div class="footer-box">
+
+            <h3>Delivery</h3>
+
+            <p>Lahore, Pakistan</p>
+
+
+            <p>Premium Gift Wrapping</p>
+
+        </div>
+
+        <div class="footer-box">
+
+            <h3>Follow Us</h3>
+
+            <div class="social-icons">
+
+              <a href="https://www.instagram.com/glowzy_house?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fa-brands fa-instagram"></i></a>
+
+                <a href="https://www.facebook.com/glowzyhouse"><i class="fa-brands fa-facebook-f"></i></a>
+  
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <p>© 2026 Glowzy House. All Rights Reserved.</p>
+
+    </div>
+
+</footer>
+<!-- PRODUCT MODAL -->
+<!-- ================= PRODUCT MODAL ================= -->
+
+<div class="product-modal" id="productModal">
+
+  <div class="modal-content">
+
+    <span class="close-modal">&times;</span>
+
+    <img id="modal-img" src="" alt="Product">
+
+    <h2 id="modal-title"></h2>
+
+    <h3 id="modal-price"></h3>
+
+    <p id="modal-desc"></p>
+
+    <h4>What's Included</h4>
+
+    <ul id="modal-items"></ul>
+
+    <h4>Delivery</h4>
+
+    <p id="modal-delivery"></p>
+
+    <h4>Perfect For</h4>
+
+    <p id="modal-occasion"></p>
+
+
+  </div>
+
+</div>
+<div id="toast" class="toast"></div>
+<script src="js/shop.js"></script>
+
+</div>
+</body>
+</html>
