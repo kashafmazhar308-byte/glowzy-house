@@ -140,7 +140,7 @@ const details = {
     occasion: "Corporate Gift, Birthday, Thank You",
   },
 
-  "Wedding Basket": {
+  "Wedding Hamper": {
     image: "images/basket6.jpeg",
 
     price: "Rs. 5,999",
