@@ -45,158 +45,154 @@ document.querySelectorAll(".cart-btn").forEach((button) => {
 // ==============================
 // PRODUCT DETAILS
 // ==============================
-
 const details = {
   "Luxury Gift Hamper": {
-    image: "images/basket1.jpg",
-
-    price: "Rs. 2,499",
-
+    image: "images/basket1.jpeg",
+    price: "Rs. 4,499",
     description:
-      "A beautifully designed luxury gift hamper made with premium products and elegant packaging.",
-
+      "A premium snack gift basket beautifully arranged with chocolates, chips, soft drinks, juice and a birthday card. Handcrafted with elegant black floral decoration, making it a perfect surprise for your loved ones.",
     items: [
-      "Ferrero Rocher Chocolates",
-      "Fresh Flowers",
-      "Teddy Bear",
-      "Greeting Card",
-      "Luxury Basket",
+      "Lays Chips",
+      "Cadbury Eclairs",
+      "Cup Cakes",
+      "Cheetos",
+      "Coca-Cola",
+      "Mixed Snacks",
+      "Juice Pack",
+      "Birthday Card",
+      "Decorative Basket",
     ],
-
-    delivery: "Same day delivery in Lahore. Nationwide delivery in 2-4 days.",
-
+    delivery:
+      "Same day delivery in Lahore. Nationwide delivery in 2-4 working days.",
     occasion: "Birthday, Anniversary, Surprise Gift",
   },
 
   "Chocolate Hamper": {
-    image: "images/basket2.jpg",
-
-    price: "Rs. 3,499",
-
+    image: "images/basket2.jpeg",
+    price: "Rs. 3,299",
     description:
-      "Premium imported chocolates arranged beautifully inside a luxury hamper.",
-
+      "A luxury chocolate bouquet featuring premium chocolates wrapped in elegant transparent gift packaging with a decorative ribbon.",
     items: [
       "Ferrero Rocher",
-      "KitKat",
-      "Dairy Milk",
-      "Flowers",
-      "Luxury Basket",
+      "Kinder Bueno",
+      "Cadbury Dairy Milk",
+      "Snickers",
+      "5 Star",
+      "Munch",
+      "Dark Chocolate",
+      "Luxury Gift Wrapping",
     ],
-
-    delivery: "Same day delivery in Lahore. Nationwide delivery available.",
-
-    occasion: "Birthday, Corporate Gift, Thank You",
+    delivery: "Nationwide delivery available.",
+    occasion: "Birthday, Anniversary, Valentine's Day",
   },
 
   "Birthday Hamper": {
-    image: "images/basket3.jpg",
-
-    price: "Rs.7,499",
-
+    image: "images/basket3.jpeg",
+    price: "Rs. 3,799",
     description:
-      "Luxury preserved roses with chocolates and premium gifts in an elegant gift box.",
-
-    items: ["Luxury Roses", "Ferrero Rocher", "Perfume", "Luxury Gift Box"],
-
-    delivery: "Delivery available in Lahore",
-
-    occasion: "Birthday, Anniversary",
-  },
-  "Baby Gift Basket": {
-    image: "images/basket4.jpg",
-
-    price: "Rs. 4,299",
-
-    description: "A beautiful baby gift basket with adorable baby essentials.",
-
+      "A classic birthday snack basket filled with popular chips, chocolates, donuts, drinks and premium treats in an elegant basket.",
     items: [
-      "Baby Clothes",
-      "Soft Toy",
-      "Baby Blanket",
-      "Baby Lotion",
-      "Gift Box",
+      "Lays",
+      "Super Crisps",
+      "Kurkure",
+      "Donut Cake",
+      "Ferrero Rocher",
+      "Chocolate Bars",
+      "Soft Drink",
+      "Decorative Basket",
     ],
-
     delivery: "Same day delivery in Lahore.",
+    occasion: "Birthday, Congratulations, Friends Gift",
+  },
 
+  "Baby Gift Basket": {
+    image: "images/basket4.jpeg",
+    price: "Rs. 5,499",
+    description:
+      "A beautiful newborn gift basket with premium baby care essentials presented in an elegant handcrafted basket.",
+    items: [
+      "Baby Powder",
+      "Baby Lotion",
+      "Baby Oil",
+      "Baby Cream",
+      "Baby Soap",
+      "Baby Bottle",
+      "Decorative Basket",
+    ],
+    delivery: "Nationwide delivery available.",
     occasion: "Baby Shower, Newborn Gift",
   },
 
   "Coffee Lover Basket": {
-    image: "images/basket5.jpg",
+    image: "images/basket5.jpeg",
+    price: "Rs. 4,999",
+    description:
+      "Luxury coffee gift box featuring premium coffee, chocolates, cookies and a stylish coffee mug in elegant packaging.",
+    items: [
+      "Nescafe Gold",
+      "Lindt Chocolate",
+      "Pringles",
+      "Coffee Mug",
+      "Coffee Cookies",
+      "Premium Gift Box",
+    ],
+    delivery: "Delivery all over Pakistan.",
+    occasion: "Corporate Gift, Birthday, Thank You",
+  },
 
-    price: "Rs. 5,199",
+  "Wedding Basket": {
+    image: "images/basket6.jpeg",
+
+    price: "Rs. 5,999",
 
     description:
-      "A luxury coffee hamper for coffee lovers with premium treats.",
+      "A beautifully handcrafted wedding gift basket featuring premium gifts, elegant floral decorations, luxury chocolates, scented candles, and exquisite wrapping. Perfect for celebrating weddings with style and creating unforgettable memories.",
 
     items: [
-      "Premium Coffee",
-      "Coffee Mug",
-      "Cookies",
-      "Chocolate",
-      "Greeting Card",
+      "Fresh Artificial Flowers",
+      "Ferrero Rocher Chocolates",
+      "Luxury Scented Candle",
+      "Premium Body Care Set",
+      "Decorative Wedding Card",
+      "Elegant Gift Box",
+      "Luxury Ribbon Decoration",
+      "Fairy Lights",
+      "Premium Wicker Basket",
     ],
-
-    delivery: "Nationwide delivery available.",
-
-    occasion: "Corporate Gift, Birthday",
   },
-
-  "Wedding Hamper": {
-    image: "images/basket6.jpg",
-
-    price: "Rs. 8,999",
-
-    description: "An elegant wedding hamper designed with luxury products.",
-
+  "EID Basket": {
+    image: "images/basket7.jpeg",
+    price: "Rs. 2,999",
+    description:
+      "A traditional floral gift basket beautifully decorated with fresh flowers, bangles and accessories for special celebrations.",
     items: [
       "Fresh Flowers",
-      "Luxury Chocolates",
-      "Scented Candle",
+      "Decorative Bangles",
+      "Jewellery Accessories",
+      "Henna Cones",
       "Greeting Card",
-      "Gift Basket",
+      "Handmade Basket",
     ],
-
-    delivery: "Delivery across Pakistan.",
-
-    occasion: "Wedding, Anniversary",
-  },
-
-  "Luxury Flower Basket": {
-    image: "images/basket7.jpg",
-
-    price: "Rs. 6,499",
-
-    description: "A luxury flower basket with fresh roses and premium gifts.",
-
-    items: ["Fresh Roses", "Chocolate", "Greeting Card", "Luxury Basket"],
-
-    delivery: "Nationwide delivery.",
-
-    occasion: "Anniversary, Birthday",
+    delivery: "Delivery available across Pakistan.",
+    occasion: "Mehndi, Wedding, Engagement",
   },
 
   "Premium Surprise Box": {
     image: "images/basket8.jpeg",
-
-    price: "Rs. 9,499",
-
+    price: "Rs. 6,999",
     description:
-      "Our most luxurious premium surprise box with imported products.",
-
+      "An elegant premium acrylic surprise box filled with Ferrero Rocher, chocolates, Pringles and luxury snacks, beautifully decorated with flowers and ribbons.",
     items: [
-      "Imported Chocolates",
-      "Luxury Perfume",
-      "Fresh Roses",
-      "Premium Teddy",
-      "Luxury Packaging",
+      "Ferrero Rocher",
+      "Pringles",
+      "Snickers",
+      "Toblerone",
+      "Premium Chocolates",
+      "Luxury Acrylic Box",
+      "Floral Decoration",
     ],
-
-    delivery: "Nationwide premium delivery.",
-
-    occasion: "Luxury Gift, Anniversary, VIP Gift",
+    delivery: "Premium nationwide delivery.",
+    occasion: "Birthday, Anniversary, Luxury Gift, Corporate Gift",
   },
 };
 // ==============================
