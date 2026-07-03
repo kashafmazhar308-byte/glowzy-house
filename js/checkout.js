@@ -123,17 +123,29 @@ Rs. ${(item.price * item.quantity).toLocaleString()}
 
   if (payment === "SadaPay") {
     showToast(
-      "Complete your SadaPay payment and send the screenshot on WhatsApp.",
+      "Complete your SadaPay payment and send the screenshot on Email.",
       "success",
     );
   }
+  const templateParams = {
+    customer_name: name,
+    customer_phone: phone,
+    customer_email: email,
+    customer_address: address,
+    payment_method: payment,
+    order_details: message,
+    total: "Rs. " + total.toLocaleString(),
+  };
 
-  const whatsappNumber = "923161440430";
-  showToast("Order placed successfully! Redirecting...", "success");
-  window.open(
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
-    "_blank",
-  );
+  emailjs
+    .send("service_7pt9p6a", "template_ig77ozj", templateParams)
+    .then(() => {
+      showToast("Order placed successfully!", "success");
+    })
+    .catch((error) => {
+      console.error(error);
+      showToast("Failed to send order. Please try again.", "error");
+    });
 
   localStorage.removeItem("cart");
 
