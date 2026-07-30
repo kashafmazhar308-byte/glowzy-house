@@ -78,19 +78,17 @@ We are always happy to help you choose the perfect luxury gift hamper.
 
 <div class="contact-form">
 
-<form>
 
-<input type="text" placeholder="Your Name" required>
 
-<input type="email" placeholder="Your Email" required>
-
-<input type="text" placeholder="Subject">
-
-<textarea rows="6" placeholder="Write your message"></textarea>
-
-<button type="submit">Send Message</button>
-
+<form id="contact-form">
+    <input type="text" name="from_name" placeholder="Your Name" required>
+    <input type="email" name="from_email" placeholder="Your Email" required>
+    <input type="text" name="subject" placeholder="Subject">
+    <textarea name="message" rows="6" placeholder="Write your message" required></textarea>
+    <button type="submit">Send Message</button>
 </form>
+
+
 
 </div>
 
@@ -149,6 +147,7 @@ We are always happy to help you choose the perfect luxury gift hamper.
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="js/script.js"></script>
 
 </body>
