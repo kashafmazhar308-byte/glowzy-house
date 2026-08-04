@@ -68,27 +68,3 @@ if (year) {
 }
 
 console.log("Glowzy House Loaded Successfully ✨");
-// ==============================
-// Contact Form - EmailJS
-// ==============================
-
-emailjs.init("NWzVBEpHEcrgFWThl");
-
-const contactForm = document.getElementById("contact-form");
-
-if (contactForm) {
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    emailjs
-      .sendForm("service_7pt9p6a", "template_ig77ozj", this)
-      .then(() => {
-        alert("✅ Your message has been sent successfully!");
-        contactForm.reset();
-      })
-      .catch((error) => {
-        alert("❌ Failed to send message.");
-        console.error(error);
-      });
-  });
-}
