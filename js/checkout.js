@@ -136,23 +136,18 @@ Rs. ${(item.price * item.quantity).toLocaleString()}
     order_details: message,
     total: "Rs. " + total.toLocaleString(),
   };
-
   emailjs
     .send("service_7pt9p6a", "template_ig77ozj", templateParams)
     .then(() => {
-      showToast("Order placed successfully!", "success");
+      localStorage.removeItem("cart");
+
+      window.location.href = "order-success.html";
     })
     .catch((error) => {
       console.error(error);
       showToast("Failed to send order. Please try again.", "error");
     });
-
-  localStorage.removeItem("cart");
-
-  setTimeout(() => {
-    window.location.href = "index.html";
-  }, 1000);
-});
+}); // ✅ Ye line missing thi
 // ==============================
 // TOAST NOTIFICATION
 // ==============================
