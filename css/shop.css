@@ -1,0 +1,720 @@
+/* ==========================================
+   GLOWZY HOUSE - SHOP CSS
+   PART 1
+   Global + Hero + Search + Categories
+========================================== */
+
+:root {
+  --primary: #c9a46b;
+  --primary-dark: #b88a52;
+  --dark: #3d2d22;
+  --text: #555;
+  --light: #faf8f5;
+  --white: #ffffff;
+  --border: #ececec;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --radius: 20px;
+  --transition: 0.35s ease;
+}
+
+/* RESET */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--light);
+  font-family: "Poppins", sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===============================
+   SHOP HERO
+================================ */
+
+.shop-hero {
+  height: 320px;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("images/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shop-overlay {
+  text-align: center;
+  color: #fff;
+}
+
+.shop-overlay h1 {
+  font-size: 58px;
+  margin-bottom: 15px;
+}
+
+.shop-overlay p {
+  font-size: 18px;
+}
+
+/* ===============================
+   TOOLBAR
+================================ */
+
+.shop-toolbar {
+  position: relative;
+  margin: 40px auto;
+}
+/* SEARCH */
+
+.search-box {
+  flex: 1;
+
+  display: flex;
+
+  background: #fff;
+
+  border-radius: 50px;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow);
+
+  border: 1px solid var(--border);
+}
+
+.search-box input {
+  flex: 1;
+
+  border: none;
+
+  padding: 16px 24px;
+
+  font-size: 15px;
+
+  background: transparent;
+
+  outline: none;
+}
+
+.search-box input::placeholder {
+  color: #999;
+}
+
+.search-box button {
+  width: 60px;
+
+  border: none;
+
+  background: var(--primary);
+
+  color: #fff;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.search-box button:hover {
+  background: var(--primary-dark);
+}
+
+/* SORT */
+
+#sortProducts {
+  width: 210px;
+
+  height: 56px;
+
+  border: none;
+
+  border-radius: 50px;
+
+  padding: 0 18px;
+
+  background: #fff;
+
+  box-shadow: var(--shadow);
+
+  outline: none;
+
+  cursor: pointer;
+
+  font-size: 15px;
+}
+
+/* ===============================
+   CATEGORY
+================================ */
+
+.shop-categories {
+  width: 92%;
+
+  max-width: 1250px;
+
+  margin: 0 auto 45px;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 14px;
+
+  flex-wrap: wrap;
+}
+
+.shop-categories button {
+  padding: 12px 24px;
+
+  border-radius: 40px;
+
+  border: 1px solid #ddd;
+
+  background: #fff;
+
+  color: #555;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.shop-categories button:hover {
+  transform: translateY(-3px);
+
+  border-color: var(--primary);
+
+  color: var(--primary);
+}
+
+.shop-categories button.active {
+  background: var(--primary);
+
+  color: #fff;
+
+  border-color: var(--primary);
+}
+
+/* ===============================
+   PRODUCTS SECTION
+================================ */
+
+.products {
+  margin-top: 40px;
+}
+.product-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 32px;
+}
+/* ==========================================
+   GLOWZY HOUSE - SHOP CSS
+   PART 2
+   Product Cards
+========================================== */
+
+/* PRODUCT CARD */
+
+.product-card {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: 0.35s ease;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* IMAGE */
+
+.product-image {
+  position: relative;
+  overflow: hidden;
+  height: 300px;
+  background: #f5f5f5;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.45s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.08);
+}
+
+/* BADGE */
+
+.badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: #c9a46b;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+/* WISHLIST */
+
+.wishlist {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  transition: 0.3s;
+  z-index: 2;
+}
+
+.wishlist:hover {
+  background: #c9a46b;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* INFO */
+
+.product-info {
+  padding: 24px;
+}
+
+.product-info h3 {
+  font-size: 24px;
+  font-family: "Cormorant Garamond", serif;
+  color: #3d2d22;
+  margin-bottom: 10px;
+}
+
+.rating {
+  color: #d4af37;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.product-info h4 {
+  color: #b88a52;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+/* BUTTONS */
+
+.product-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* VIEW */
+
+.view-btn {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  padding: 13px;
+  border: 2px solid #c9a46b;
+  color: #c9a46b;
+  border-radius: 40px;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+.view-btn:hover {
+  background: #c9a46b;
+  color: #fff;
+}
+
+/* CART */
+
+.cart-btn {
+  width: 58px;
+  border: none;
+  border-radius: 50%;
+  background: #3d2d22;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.cart-btn:hover {
+  background: #c9a46b;
+  transform: rotate(8deg) scale(1.05);
+}
+
+/* SMALL ANIMATION */
+
+.product-card {
+  animation: fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ==========================================
+   GLOWZY HOUSE - SHOP CSS
+   PART 3
+   Modal + Footer + Responsive + Animations
+========================================== */
+
+/* =========================
+   PRODUCT MODAL
+========================= */
+
+.product-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.product-modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  animation: modalPop 0.35s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.modal-content img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+}
+
+.modal-content h2 {
+  font-family: "Cormorant Garamond", serif;
+  color: #3d2d22;
+  font-size: 38px;
+  margin: 25px;
+}
+
+.modal-content h3 {
+  color: #c9a46b;
+  font-size: 30px;
+  margin: 0 25px 20px;
+}
+
+.modal-content h4 {
+  margin: 20px 25px 10px;
+  color: #3d2d22;
+}
+
+.modal-content p,
+.modal-content ul {
+  margin: 0 25px 15px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 22px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+.close-modal:hover {
+  background: #c9a46b;
+  color: #fff;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #3d2d22;
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.35s;
+  z-index: 10000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+  background: #3d2d22;
+  color: #fff;
+  padding: 70px 0 0;
+  margin-top: 70px;
+}
+
+.footer-container {
+  width: 92%;
+  max-width: 1250px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+
+.footer-box h2,
+.footer-box h3 {
+  color: #c9a46b;
+  margin-bottom: 18px;
+}
+
+.footer-box p,
+.footer-box a {
+  color: #ddd;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 12px;
+  transition: 0.3s;
+}
+
+.footer-box a:hover {
+  color: #fff;
+  padding-left: 8px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 14px;
+}
+
+.social-icons a {
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  color: #3d2d22;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.social-icons a:hover {
+  background: #c9a46b;
+  color: #fff;
+  transform: translateY(-5px);
+}
+
+.footer-bottom {
+  margin-top: 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+  padding: 22px;
+  color: #bbb;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f3f3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9a46b;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b88a52;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 992px) {
+  .shop-overlay h1 {
+    font-size: 46px;
+  }
+
+  .product-image {
+    height: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-hero {
+    height: 240px;
+  }
+
+  .shop-overlay h1 {
+    font-size: 36px;
+  }
+
+  .shop-overlay p {
+    font-size: 15px;
+    padding: 0 20px;
+  }
+
+  .shop-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box,
+  #sortProducts {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .shop-categories {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+  }
+
+  .shop-categories button {
+    white-space: nowrap;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .product-image {
+    height: 240px;
+  }
+
+  .product-buttons {
+    flex-direction: column;
+  }
+
+  .cart-btn {
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+  }
+
+  .modal-content img {
+    height: 240px;
+  }
+
+  .footer-container {
+    text-align: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .shop-overlay h1 {
+    font-size: 30px;
+  }
+
+  .modal-content h2 {
+    font-size: 28px;
+  }
+
+  .modal-content h3 {
+    font-size: 24px;
+  }
+
+  .footer {
+    padding-top: 50px;
+  }
+}
