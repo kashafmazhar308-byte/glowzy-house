@@ -194,7 +194,52 @@ const details = {
     delivery: "Premium nationwide delivery.",
     occasion: "Birthday, Anniversary, Luxury Gift, Corporate Gift",
   },
+
+  "Premium Birthday Basket": {
+    image: "images/basket2.jpeg",
+    price: "Rs. 13,999",
+
+    description:
+      "A luxurious premium birthday basket beautifully arranged with Ferrero Rocher chocolates, teddy bear, fresh flowers, premium snacks, greeting card and elegant gift wrapping. Perfect for making birthdays extra special.",
+
+    items: [
+      "Premium Teddy Bear",
+      "Ferrero Rocher",
+      "Pringles",
+      "KitKat",
+      "Kinder Bueno",
+      "Dairy Milk Silk",
+      "Fresh Flowers",
+      "Birthday Greeting Card",
+      "Luxury Ribbon Decoration",
+      "Premium Wicker Basket",
+    ],
+
+    delivery:
+      "Same day delivery in Lahore. Nationwide delivery in 2-4 working days.",
+
+    occasion: "Birthday, Surprise Gift, Anniversary, Special Occasion",
+  },
+
+  "Classic Birthday Basket": {
+    image: "images/classic-birthday-basket.jpg",
+    price: "Rs. 6,000",
+    description:
+      "A beautifully arranged Classic Birthday Basket featuring a delicious cake, Coca-Cola can, premium chocolates, snacks, birthday card, and elegant gift wrapping. Perfect for making birthdays memorable.",
+    items: [
+      "Birthday Cake",
+      "Coca-Cola Can",
+      "Premium Chocolates",
+      "Mixed Snacks",
+      "Birthday Greeting Card",
+      "Decorative Basket",
+      "Luxury Net Wrapping",
+    ],
+    delivery: "Same day delivery in Lahore. Nationwide delivery available.",
+    occasion: "Birthday, Surprise Gift, Family, Friends",
+  },
 };
+
 // ==============================
 // MODAL
 // ==============================
