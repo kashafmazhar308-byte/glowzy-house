@@ -2,7 +2,10 @@
 // Glowzy House - shop.js
 // ==============================
 
+// ==============================
 // CART
+// ==============================
+
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 const cartCount = document.querySelector(".cart-count");
 
@@ -10,6 +13,7 @@ const cartCount = document.querySelector(".cart-count");
 function updateCartCount() {
   if (cartCount) {
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
     cartCount.textContent = totalItems;
   }
 }
@@ -45,12 +49,15 @@ document.querySelectorAll(".cart-btn").forEach((button) => {
 // ==============================
 // PRODUCT DETAILS
 // ==============================
+
 const details = {
   "Luxury Gift Hamper": {
     image: "images/basket1.jpeg",
     price: "Rs. 4,499",
+
     description:
       "A premium snack gift basket beautifully arranged with chocolates, chips, soft drinks, juice and a birthday card. Handcrafted with elegant black floral decoration, making it a perfect surprise for your loved ones.",
+
     items: [
       "Lays Chips",
       "Cadbury Eclairs",
@@ -62,16 +69,20 @@ const details = {
       "Birthday Card",
       "Decorative Basket",
     ],
+
     delivery:
       "Same day delivery in Lahore. Nationwide delivery in 2-4 working days.",
+
     occasion: "Birthday, Anniversary, Surprise Gift",
   },
 
   "Chocolate Hamper": {
     image: "images/basket2.jpeg",
     price: "Rs. 3,299",
+
     description:
       "A luxury chocolate bouquet featuring premium chocolates wrapped in elegant transparent gift packaging with a decorative ribbon.",
+
     items: [
       "Ferrero Rocher",
       "Kinder Bueno",
@@ -82,15 +93,19 @@ const details = {
       "Dark Chocolate",
       "Luxury Gift Wrapping",
     ],
+
     delivery: "Nationwide delivery available.",
+
     occasion: "Birthday, Anniversary, Valentine's Day",
   },
 
   "Birthday Hamper": {
     image: "images/basket3.jpeg",
     price: "Rs. 3,799",
+
     description:
       "A classic birthday snack basket filled with popular chips, chocolates, donuts, drinks and premium treats in an elegant basket.",
+
     items: [
       "Lays",
       "Super Crisps",
@@ -101,15 +116,19 @@ const details = {
       "Soft Drink",
       "Decorative Basket",
     ],
+
     delivery: "Same day delivery in Lahore.",
+
     occasion: "Birthday, Congratulations, Friends Gift",
   },
 
   "Baby Gift Basket": {
     image: "images/basket4.jpeg",
     price: "Rs. 5,499",
+
     description:
       "A beautiful newborn gift basket with premium baby care essentials presented in an elegant handcrafted basket.",
+
     items: [
       "Baby Powder",
       "Baby Lotion",
@@ -119,15 +138,19 @@ const details = {
       "Baby Bottle",
       "Decorative Basket",
     ],
+
     delivery: "Nationwide delivery available.",
+
     occasion: "Baby Shower, Newborn Gift",
   },
 
   "Coffee Lover Basket": {
     image: "images/basket5.jpeg",
     price: "Rs. 4,999",
+
     description:
       "Luxury coffee gift box featuring premium coffee, chocolates, cookies and a stylish coffee mug in elegant packaging.",
+
     items: [
       "Nescafe Gold",
       "Lindt Chocolate",
@@ -136,13 +159,14 @@ const details = {
       "Coffee Cookies",
       "Premium Gift Box",
     ],
+
     delivery: "Delivery all over Pakistan.",
+
     occasion: "Corporate Gift, Birthday, Thank You",
   },
 
   "Wedding Hamper": {
     image: "images/basket6.jpeg",
-
     price: "Rs. 5,999",
 
     description:
@@ -159,12 +183,19 @@ const details = {
       "Fairy Lights",
       "Premium Wicker Basket",
     ],
+
+    delivery: "Nationwide delivery available.",
+
+    occasion: "Wedding, Engagement, Anniversary",
   },
+
   "EID Basket": {
     image: "images/basket7.jpeg",
     price: "Rs. 2,999",
+
     description:
       "A traditional floral gift basket beautifully decorated with fresh flowers, bangles and accessories for special celebrations.",
+
     items: [
       "Fresh Flowers",
       "Decorative Bangles",
@@ -173,15 +204,19 @@ const details = {
       "Greeting Card",
       "Handmade Basket",
     ],
+
     delivery: "Delivery available across Pakistan.",
+
     occasion: "Mehndi, Wedding, Engagement",
   },
 
   "Premium Surprise Box": {
     image: "images/basket8.jpeg",
     price: "Rs. 6,999",
+
     description:
       "An elegant premium acrylic surprise box filled with Ferrero Rocher, chocolates, Pringles and luxury snacks, beautifully decorated with flowers and ribbons.",
+
     items: [
       "Ferrero Rocher",
       "Pringles",
@@ -191,12 +226,14 @@ const details = {
       "Luxury Acrylic Box",
       "Floral Decoration",
     ],
+
     delivery: "Premium nationwide delivery.",
+
     occasion: "Birthday, Anniversary, Luxury Gift, Corporate Gift",
   },
 
   "Premium Birthday Basket": {
-    image: "images/basket2.jpeg",
+    image: "images/basket12.jpeg",
     price: "Rs. 13,999",
 
     description:
@@ -222,10 +259,12 @@ const details = {
   },
 
   "Classic Birthday Basket": {
-    image: "images/classic-birthday-basket.jpg",
+    image: "images/basket123.jpeg",
     price: "Rs. 6,000",
+
     description:
       "A beautifully arranged Classic Birthday Basket featuring a delicious cake, Coca-Cola can, premium chocolates, snacks, birthday card, and elegant gift wrapping. Perfect for making birthdays memorable.",
+
     items: [
       "Birthday Cake",
       "Coca-Cola Can",
@@ -235,66 +274,173 @@ const details = {
       "Decorative Basket",
       "Luxury Net Wrapping",
     ],
+
     delivery: "Same day delivery in Lahore. Nationwide delivery available.",
+
     occasion: "Birthday, Surprise Gift, Family, Friends",
   },
 };
 
 // ==============================
-// MODAL
+// MODAL ELEMENTS
 // ==============================
 
 const modal = document.getElementById("productModal");
+
 const modalImg = document.getElementById("modal-img");
+
 const modalTitle = document.getElementById("modal-title");
+
 const modalPrice = document.getElementById("modal-price");
+
 const modalDesc = document.getElementById("modal-desc");
+
 const modalItems = document.getElementById("modal-items");
+
 const modalDelivery = document.getElementById("modal-delivery");
+
 const modalOccasion = document.getElementById("modal-occasion");
 
-// View Details
+// ==============================
+// OPEN PRODUCT DETAILS
+// ==============================
+
+function openProductDetails(card) {
+  if (!card || !modal) return;
+
+  const nameElement = card.querySelector("h3");
+
+  if (!nameElement) return;
+
+  const name = nameElement.innerText.trim();
+
+  const product = details[name];
+
+  if (!product) {
+    alert("Product details not found.");
+    return;
+  }
+
+  // Product Image
+  if (modalImg) {
+    modalImg.src = product.image;
+
+    modalImg.alt = name;
+  }
+
+  // Product Name
+  if (modalTitle) {
+    modalTitle.innerText = name;
+  }
+
+  // Product Price
+  if (modalPrice) {
+    modalPrice.innerText = product.price;
+  }
+
+  // Description
+  if (modalDesc) {
+    modalDesc.innerText = product.description;
+  }
+
+  // Product Items
+  if (modalItems) {
+    modalItems.innerHTML = "";
+
+    product.items.forEach((item) => {
+      const li = document.createElement("li");
+
+      li.textContent = item;
+
+      modalItems.appendChild(li);
+    });
+  }
+
+  // Delivery
+  if (modalDelivery) {
+    modalDelivery.innerText = product.delivery || "Delivery available.";
+  }
+
+  // Occasion
+  if (modalOccasion) {
+    modalOccasion.innerText =
+      product.occasion || "Perfect for every special occasion.";
+  }
+
+  // Open Modal
+  modal.classList.add("active");
+
+  // Prevent Background Scroll
+  document.body.style.overflow = "hidden";
+}
+
+// ==============================
+// VIEW DETAILS BUTTON
+// ==============================
+
 document.querySelectorAll(".view-btn").forEach((button) => {
   button.addEventListener("click", function (e) {
     e.preventDefault();
 
     const card = this.closest(".product-card");
-    const name = card.querySelector("h3").innerText.trim();
 
-    const product = details[name];
-
-    if (!product) {
-      alert("Product details not found.");
-      return;
-    }
-
-    modalImg.src = product.image;
-    modalTitle.innerText = name;
-    modalPrice.innerText = product.price;
-    modalDesc.innerText = product.description;
-
-    modalItems.innerHTML = "";
-
-    product.items.forEach((item) => {
-      modalItems.innerHTML += `<li>${item}</li>`;
-    });
-
-    modalDelivery.innerText = product.delivery;
-    modalOccasion.innerText = product.occasion;
-
-    modal.classList.add("active");
+    openProductDetails(card);
   });
 });
 
-// Close Modal
-document.querySelector(".close-modal").addEventListener("click", () => {
-  modal.classList.remove("active");
+// ==============================
+// PRODUCT IMAGE CLICK
+// ==============================
+
+document.querySelectorAll(".product-card img").forEach((image) => {
+  image.style.cursor = "pointer";
+
+  image.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const card = this.closest(".product-card");
+
+    openProductDetails(card);
+  });
 });
 
-// Close When Click Outside
+// ==============================
+// CLOSE MODAL
+// ==============================
+
+const closeModalButton = document.querySelector(".close-modal");
+
+if (closeModalButton) {
+  closeModalButton.addEventListener("click", () => {
+    if (modal) {
+      modal.classList.remove("active");
+
+      document.body.style.overflow = "";
+    }
+  });
+}
+
+// ==============================
+// CLOSE OUTSIDE MODAL
+// ==============================
+
 window.addEventListener("click", (e) => {
-  if (e.target === modal) {
+  if (modal && e.target === modal) {
     modal.classList.remove("active");
+
+    document.body.style.overflow = "";
+  }
+});
+
+// ==============================
+// CLOSE WITH ESC
+// ==============================
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modal && modal.classList.contains("active")) {
+    modal.classList.remove("active");
+
+    document.body.style.overflow = "";
   }
 });
 
@@ -319,22 +465,25 @@ if (searchInput) {
     });
   });
 }
+
 // ==============================
 // CATEGORY FILTER
 // ==============================
 
 const categoryButtons = document.querySelectorAll(".shop-categories button");
+
 const productCards = document.querySelectorAll(".product-card");
 
 categoryButtons.forEach((button) => {
   button.addEventListener("click", () => {
     categoryButtons.forEach((btn) => btn.classList.remove("active"));
+
     button.classList.add("active");
 
     const category = button.innerText.toLowerCase();
 
     productCards.forEach((card) => {
-      const cardCategory = card.dataset.category.toLowerCase();
+      const cardCategory = (card.dataset.category || "").toLowerCase();
 
       if (category === "all") {
         card.style.display = "";
@@ -347,8 +496,34 @@ categoryButtons.forEach((button) => {
   });
 });
 // ==============================
-// WISHLIST
+// CATEGORY FROM HOME PAGE
 // ==============================
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const selectedCategory = urlParams.get("category");
+
+if (selectedCategory) {
+  const category = selectedCategory.toLowerCase();
+
+  productCards.forEach((card) => {
+    const categories = (card.dataset.category || "").toLowerCase();
+
+    if (categories.includes(category)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  // Activate matching category button
+  categoryButtons.forEach((button) => {
+    if (button.innerText.toLowerCase().includes(category)) {
+      button.classList.add("active");
+    }
+  });
+}
+
 // ==============================
 // WISHLIST
 // ==============================
@@ -368,12 +543,17 @@ updateWishlistCount();
 document.querySelectorAll(".wishlist").forEach((heart) => {
   const card = heart.closest(".product-card");
 
+  if (!card) return;
+
   const name = card.querySelector("h3").innerText.trim();
+
   const image = card.querySelector("img").getAttribute("src");
+
   const price = card.querySelector("h4").innerText;
 
   if (wishlist.find((item) => item.name === name)) {
     heart.classList.remove("fa-regular");
+
     heart.classList.add("fa-solid", "active");
   }
 
@@ -388,6 +568,7 @@ document.querySelectorAll(".wishlist").forEach((heart) => {
       });
 
       heart.classList.remove("fa-regular");
+
       heart.classList.add("fa-solid", "active");
 
       showToast(name + " added to wishlist ❤️");
@@ -395,6 +576,7 @@ document.querySelectorAll(".wishlist").forEach((heart) => {
       wishlist.splice(index, 1);
 
       heart.classList.remove("fa-solid", "active");
+
       heart.classList.add("fa-regular");
 
       showToast(name + " removed from wishlist", "error");
@@ -405,6 +587,7 @@ document.querySelectorAll(".wishlist").forEach((heart) => {
     updateWishlistCount();
   });
 });
+
 // ==============================
 // TOAST
 // ==============================
@@ -422,11 +605,13 @@ function showToast(message, type = "success") {
     toast.classList.remove("show");
   }, 3000);
 }
+
 // ==============================
 // PRODUCT SORTING
 // ==============================
 
 const sortSelect = document.getElementById("sortProducts");
+
 const productGrid = document.querySelector(".product-grid");
 
 if (sortSelect && productGrid) {
@@ -437,37 +622,50 @@ if (sortSelect && productGrid) {
       case "low-high":
         cards.sort((a, b) => {
           const priceA = parseInt(a.querySelector(".cart-btn").dataset.price);
+
           const priceB = parseInt(b.querySelector(".cart-btn").dataset.price);
+
           return priceA - priceB;
         });
+
         break;
 
       case "high-low":
         cards.sort((a, b) => {
           const priceA = parseInt(a.querySelector(".cart-btn").dataset.price);
+
           const priceB = parseInt(b.querySelector(".cart-btn").dataset.price);
+
           return priceB - priceA;
         });
+
         break;
 
       case "az":
         cards.sort((a, b) => {
           const nameA = a.querySelector("h3").innerText;
+
           const nameB = b.querySelector("h3").innerText;
+
           return nameA.localeCompare(nameB);
         });
+
         break;
 
       case "za":
         cards.sort((a, b) => {
           const nameA = a.querySelector("h3").innerText;
+
           const nameB = b.querySelector("h3").innerText;
+
           return nameB.localeCompare(nameA);
         });
+
         break;
 
       default:
         location.reload();
+
         return;
     }
 

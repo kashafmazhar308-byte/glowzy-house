@@ -68,3 +68,47 @@ if (year) {
 }
 
 console.log("Glowzy House Loaded Successfully ✨");
+// ==============================
+// HOME PAGE - ADD TO CART
+// ==============================
+
+document.querySelectorAll(".home-cart-btn").forEach((button) => {
+  button.addEventListener("click", function () {
+    const product = {
+      name: this.dataset.name,
+      price: Number(this.dataset.price),
+      image: this.dataset.image,
+      quantity: 1,
+    };
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingProduct = cart.find((item) => item.name === product.name);
+
+    if (existingProduct) {
+      existingProduct.quantity += 1;
+    } else {
+      cart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Update cart count
+    const cartCount = document.querySelector(".cart-count");
+
+    if (cartCount) {
+      const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+      cartCount.textContent = totalItems;
+    }
+
+    // Button feedback
+    const originalText = this.textContent;
+
+    this.textContent = "Added ✓";
+
+    setTimeout(() => {
+      this.textContent = originalText;
+    }, 1500);
+  });
+});
