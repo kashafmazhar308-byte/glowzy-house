@@ -796,3 +796,12 @@ button {
     grid-template-columns: 1fr;
   }
 }
+/* Recent cards: one above the other */
+.dashboard-grid {
+  grid-template-columns: 1fr !important;
+  gap: 16px;
+}
+
+.dashboard-grid .panel-card {
+  width: 100%;
+}
