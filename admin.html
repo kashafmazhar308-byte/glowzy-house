@@ -2,27 +2,232 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Panel - Glowzy House</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Glowzy House</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
 </head>
+
 <body>
+  <div class="admin-shell">
 
-  <div class="admin-container">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">GH</span>
+        <div>
+          <strong>Glowzy House</strong>
+          <small>Admin Dashboard</small>
+        </div>
+      </div>
 
-    <h1>🛠 Admin Panel</h1>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="dashboard">Dashboard</button>
+        <button class="nav-item" data-section="products">Products</button>
+        <button class="nav-item" data-section="orders">Orders</button>
+        <button class="nav-item" data-section="inquiries">Inquiries</button>
+      </nav>
 
-    <form id="productForm">
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </aside>
 
-      <input type="text" id="name" placeholder="Product Name" required>
-      <input type="text" id="price" placeholder="Price (e.g. 2500)" required>
-      <input type="text" id="image" placeholder="Image URL (images/basket1.jpg)" required>
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">GLOWZY HOUSE</span>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div id="adminEmail" class="admin-email"></div>
+      </header>
 
-      <button type="submit">Add Product</button>
+      <div id="configNotice" class="notice warning hidden">
+        <strong>Admin setup required.</strong>
+        Add your Supabase project URL and anon key inside <code>js/admin.js</code>.
+      </div>
 
-    </form>
+      <section id="loginSection" class="login-card">
+        <div class="login-copy">
+          <span class="eyebrow">PRIVATE AREA</span>
+          <h2>Admin Login</h2>
+          <p>Use your Supabase admin account to access products, orders and inquiries.</p>
+        </div>
 
+        <form id="loginForm" class="admin-form">
+          <label>
+            Email
+            <input type="email" id="loginEmail" required autocomplete="email">
+          </label>
+
+          <label>
+            Password
+            <input type="password" id="loginPassword" required autocomplete="current-password">
+          </label>
+
+          <button type="submit" class="primary-btn">Sign In</button>
+          <p id="loginMessage" class="form-message"></p>
+        </form>
+      </section>
+
+      <div id="dashboardApp" class="hidden">
+
+        <section id="dashboardSection" class="page-section active-section">
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span>Products</span>
+              <strong id="statProducts">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>Orders</span>
+              <strong id="statOrders">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>New Orders</span>
+              <strong id="statNewOrders">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>Inquiries</span>
+              <strong id="statInquiries">0</strong>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="panel-card">
+              <div class="panel-heading">
+                <div>
+                  <span class="eyebrow">LATEST</span>
+                  <h2>Recent Orders</h2>
+                </div>
+                <button class="text-btn" data-go="orders">View all</button>
+              </div>
+              <div id="recentOrders" class="table-wrap"></div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-heading">
+                <div>
+                  <span class="eyebrow">LATEST</span>
+                  <h2>Recent Inquiries</h2>
+                </div>
+                <button class="text-btn" data-go="inquiries">View all</button>
+              </div>
+              <div id="recentInquiries" class="table-wrap"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="productsSection" class="page-section">
+          <div class="section-toolbar">
+            <div>
+              <span class="eyebrow">CATALOG</span>
+              <h2>Manage Products</h2>
+            </div>
+            <button id="newProductBtn" class="primary-btn">+ Add Product</button>
+          </div>
+
+          <div id="productFormCard" class="panel-card hidden">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">PRODUCT</span>
+                <h2 id="productFormTitle">Add Product</h2>
+              </div>
+              <button id="cancelProductBtn" class="icon-btn" type="button">×</button>
+            </div>
+
+            <form id="productForm" class="admin-form grid-form">
+              <input type="hidden" id="productId">
+
+              <label>
+                Product Name
+                <input type="text" id="productName" required>
+              </label>
+
+              <label>
+                Price (Rs.)
+                <input type="number" id="productPrice" min="0" step="1" required>
+              </label>
+
+              <label>
+                Image URL
+                <input type="text" id="productImage" placeholder="images/basket1.jpg" required>
+              </label>
+
+              <label>
+                Category
+                <select id="productCategory">
+                  <option value="birthday">Birthday</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="anniversary">Anniversary</option>
+                  <option value="baby">Baby</option>
+                  <option value="corporate">Corporate</option>
+                  <option value="general">General</option>
+                </select>
+              </label>
+
+              <label>
+                Badge
+                <input type="text" id="productBadge" placeholder="Best Seller">
+              </label>
+
+              <label class="checkbox-label">
+                <input type="checkbox" id="productActive" checked>
+                Show on website
+              </label>
+
+              <label class="full-width">
+                Description
+                <textarea id="productDescription" rows="4" placeholder="Short product description"></textarea>
+              </label>
+
+              <div class="form-actions full-width">
+                <button type="button" id="cancelProductBtn2" class="secondary-btn">Cancel</button>
+                <button type="submit" class="primary-btn">Save Product</button>
+              </div>
+
+              <p id="productMessage" class="form-message full-width"></p>
+            </form>
+          </div>
+
+          <div class="panel-card">
+            <div id="productsTable" class="table-wrap"></div>
+          </div>
+        </section>
+
+        <section id="ordersSection" class="page-section">
+          <div class="section-toolbar">
+            <div>
+              <span class="eyebrow">SALES</span>
+              <h2>Orders</h2>
+            </div>
+            <button id="refreshOrdersBtn" class="secondary-btn">Refresh</button>
+          </div>
+
+          <div class="panel-card">
+            <div id="ordersTable" class="table-wrap"></div>
+          </div>
+        </section>
+
+        <section id="inquiriesSection" class="page-section">
+          <div class="section-toolbar">
+            <div>
+              <span class="eyebrow">CUSTOM REQUESTS</span>
+              <h2>Gift Inquiries</h2>
+            </div>
+            <button id="refreshInquiriesBtn" class="secondary-btn">Refresh</button>
+          </div>
+
+          <div class="panel-card">
+            <div id="inquiriesTable" class="table-wrap"></div>
+          </div>
+        </section>
+
+        <p id="globalMessage" class="global-message"></p>
+      </div>
+    </main>
   </div>
 
-<script src="admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
