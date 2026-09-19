@@ -76,6 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const name = data.get("name")?.toString().trim() || "";
 
+    const phone = data.get("phone")?.toString().trim() || "";
+
+    const email = data.get("email")?.toString().trim() || "";
+
     const occasion = data.get("occasion")?.toString().trim() || "";
 
     const budget = data.get("budget")?.toString().trim() || "";
@@ -84,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const giftDetails = data.get("message")?.toString().trim() || "";
 
-    if (!name || !occasion || !budget || !giftDetails) {
+    if (!name || !phone || !occasion || !budget || !giftDetails) {
       setMessage("Please fill in all required details.", "error");
       return;
     }
@@ -96,6 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const inquiryData = {
       name: name,
+      phone: phone,
+      email: email || null,
       occasion: occasion,
       budget: budget,
       preferred_date: preferredDate,
@@ -105,6 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const emailParams = {
       name: name,
+      phone: phone,
+      email: email || "Not provided",
       occasion: occasion,
       budget: budget,
       preferred_date: preferredDate || "Not specified",
@@ -137,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
+
         submitButton.innerHTML =
           'Send Inquiry <i class="fa-solid fa-paper-plane"></i>';
       }
