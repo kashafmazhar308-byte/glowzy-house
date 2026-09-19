@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Glowzy House</title>
+  <title>Glowzy House | Admin Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="css/admin.css">
 </head>
 
@@ -28,6 +29,7 @@
         <button class="nav-item" data-section="products">Products</button>
         <button class="nav-item" data-section="orders">Orders</button>
         <button class="nav-item" data-section="inquiries">Inquiries</button>
+        <button class="nav-item" data-section="customers">Customers</button>
       </nav>
 
       <button id="logoutBtn" class="logout-btn">Logout</button>
@@ -44,14 +46,14 @@
 
       <div id="configNotice" class="notice warning hidden">
         <strong>Admin setup required.</strong>
-        Add your Supabase project URL and anon key inside <code>js/admin.js</code>.
+        Add your Supabase project URL and publishable key inside <code>js/admin.js</code>.
       </div>
 
       <section id="loginSection" class="login-card">
         <div class="login-copy">
           <span class="eyebrow">PRIVATE AREA</span>
           <h2>Admin Login</h2>
-          <p>Use your Supabase admin account to access products, orders and inquiries.</p>
+          <p>Sign in to manage Glowzy House products, orders, inquiries and customers.</p>
         </div>
 
         <form id="loginForm" class="admin-form">
@@ -72,20 +74,49 @@
 
       <div id="dashboardApp" class="hidden">
 
+        <!-- DASHBOARD -->
         <section id="dashboardSection" class="page-section active-section">
+
+          <div class="period-bar">
+            <div>
+              <span class="eyebrow">SALES OVERVIEW</span>
+              <h2>Store Performance</h2>
+            </div>
+
+            <select id="salesPeriod">
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="7">Last 7 Days</option>
+              <option value="30" selected>Last 30 Days</option>
+            </select>
+          </div>
+
           <div class="stats-grid">
             <article class="stat-card">
-              <span>Products</span>
-              <strong id="statProducts">0</strong>
+              <span>Sales</span>
+              <strong id="statSales">Rs. 0</strong>
             </article>
+
             <article class="stat-card">
               <span>Orders</span>
               <strong id="statOrders">0</strong>
             </article>
+
             <article class="stat-card">
               <span>New Orders</span>
               <strong id="statNewOrders">0</strong>
             </article>
+
+            <article class="stat-card">
+              <span>Customers</span>
+              <strong id="statCustomers">0</strong>
+            </article>
+
+            <article class="stat-card">
+              <span>Products</span>
+              <strong id="statProducts">0</strong>
+            </article>
+
             <article class="stat-card">
               <span>Inquiries</span>
               <strong id="statInquiries">0</strong>
@@ -117,12 +148,14 @@
           </div>
         </section>
 
+        <!-- PRODUCTS -->
         <section id="productsSection" class="page-section">
           <div class="section-toolbar">
             <div>
               <span class="eyebrow">CATALOG</span>
               <h2>Manage Products</h2>
             </div>
+
             <button id="newProductBtn" class="primary-btn">+ Add Product</button>
           </div>
 
@@ -177,7 +210,7 @@
 
               <label class="full-width">
                 Description
-                <textarea id="productDescription" rows="4" placeholder="Short product description"></textarea>
+                <textarea id="productDescription" rows="4"></textarea>
               </label>
 
               <div class="form-actions full-width">
@@ -190,10 +223,14 @@
           </div>
 
           <div class="panel-card">
+            <div class="table-tools">
+              <input id="productSearch" type="search" placeholder="Search products...">
+            </div>
             <div id="productsTable" class="table-wrap"></div>
           </div>
         </section>
 
+        <!-- ORDERS -->
         <section id="ordersSection" class="page-section">
           <div class="section-toolbar">
             <div>
@@ -204,10 +241,23 @@
           </div>
 
           <div class="panel-card">
+            <div class="table-tools">
+              <input id="orderSearch" type="search" placeholder="Search customer, phone or address...">
+              <select id="orderStatusFilter">
+                <option value="all">All statuses</option>
+                <option>New</option>
+                <option>Confirmed</option>
+                <option>Packed</option>
+                <option>Delivered</option>
+                <option>Cancelled</option>
+              </select>
+            </div>
+
             <div id="ordersTable" class="table-wrap"></div>
           </div>
         </section>
 
+        <!-- INQUIRIES -->
         <section id="inquiriesSection" class="page-section">
           <div class="section-toolbar">
             <div>
@@ -218,7 +268,36 @@
           </div>
 
           <div class="panel-card">
+            <div class="table-tools">
+              <input id="inquirySearch" type="search" placeholder="Search name, occasion or gift details...">
+              <select id="inquiryStatusFilter">
+                <option value="all">All statuses</option>
+                <option>New</option>
+                <option>Contacted</option>
+                <option>Closed</option>
+              </select>
+            </div>
+
             <div id="inquiriesTable" class="table-wrap"></div>
+          </div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section id="customersSection" class="page-section">
+          <div class="section-toolbar">
+            <div>
+              <span class="eyebrow">CUSTOMERS</span>
+              <h2>Customer List</h2>
+            </div>
+            <button id="refreshCustomersBtn" class="secondary-btn">Refresh</button>
+          </div>
+
+          <div class="panel-card">
+            <div class="table-tools">
+              <input id="customerSearch" type="search" placeholder="Search customer or phone...">
+            </div>
+
+            <div id="customersTable" class="table-wrap"></div>
           </div>
         </section>
 
