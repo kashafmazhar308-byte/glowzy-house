@@ -1,132 +1,136 @@
-// ==============================
-// Glowzy House - wishlist.js
-// ==============================
+// ==========================================
+// Glowzy House - Wishlist JS
+// ==========================================
+(function () {
+  "use strict";
 
-let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const CART_KEY = "cart";
+  const WISHLIST_KEY = "wishlist";
 
-const wishlistItems = document.getElementById("wishlist-items");
-const wishlistCount = document.querySelector(".wishlist-count");
-const cartCount = document.querySelector(".cart-count");
+  const get = (key) => {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return Array.isArray(value) ? value : [];
+    } catch (error) {
+      return [];
+    }
+  };
 
-// Update Wishlist Count
-function updateWishlistCount() {
-  if (wishlistCount) {
-    wishlistCount.textContent = wishlist.length;
-  }
-}
+  const save = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
 
-// Update Cart Count
-function updateCartCount() {
-  if (cartCount) {
-    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCount.textContent = total;
-  }
-}
+  function updateCounters() {
+    const cart = get(CART_KEY);
+    const wishlist = get(WISHLIST_KEY);
 
-// Display Wishlist
-function displayWishlist() {
-  if (!wishlistItems) return;
+    document.querySelectorAll(".cart-count").forEach((el) => {
+      el.textContent = cart.reduce(
+        (sum, item) => sum + Number(item.quantity || 1),
+        0
+      );
+    });
 
-  wishlistItems.innerHTML = "";
-
-  if (wishlist.length === 0) {
-    wishlistItems.innerHTML = `
-            <div class="empty-cart">
-                <i class="fa-solid fa-heart-crack"></i>
-                <h2>Your wishlist is empty</h2>
-                <p>Add your favourite hampers ❤️</p>
-            </div>
-        `;
-
-    updateWishlistCount();
-    updateCartCount();
-    return;
-  }
-
-  wishlist.forEach((item, index) => {
-    wishlistItems.innerHTML += `
-
-        <div class="cart-item">
-
-            <img src="${item.image}" alt="${item.name}">
-
-            <div class="cart-details">
-
-                <h3>${item.name}</h3>
-
-                <p>${item.price}</p>
-
-            </div>
-
-            <div>
-
-                <button class="checkout-btn" onclick="addToCart(${index})">
-                    Add to Cart
-                </button>
-
-                <button class="remove-btn" onclick="removeWishlist(${index})">
-                    Remove
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
-  });
-
-  updateWishlistCount();
-  updateCartCount();
-}
-
-// Remove Wishlist Item
-function removeWishlist(index) {
-  wishlist.splice(index, 1);
-
-  localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
-  displayWishlist();
-}
-
-// Add To Cart
-function addToCart(index) {
-  const item = wishlist[index];
-
-  const existing = cart.find((product) => product.name === item.name);
-
-  if (existing) {
-    existing.quantity++;
-  } else {
-    cart.push({
-      name: item.name,
-      price: Number(item.price.replace(/[^\d]/g, "")),
-      image: item.image,
-      quantity: 1,
+    document.querySelectorAll(".wishlist-count").forEach((el) => {
+      el.textContent = wishlist.length;
     });
   }
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+  function toast(message) {
+    const el = document.getElementById("toast");
+    if (!el) return;
 
-  showToast(item.name + " added to cart!");
+    el.textContent = message;
+    el.classList.add("show");
 
-  updateCartCount();
-}
+    clearTimeout(window.glowzyWishlistToast);
+    window.glowzyWishlistToast = setTimeout(
+      () => el.classList.remove("show"),
+      1800
+    );
+  }
 
-displayWishlist();
-// ==============================
-// TOAST
-// ==============================
+  function render() {
+    const box = document.getElementById("wishlist-items");
+    if (!box) return;
 
-function showToast(message, type = "success") {
-  const toast = document.getElementById("toast");
+    const items = get(WISHLIST_KEY);
 
-  if (!toast) return;
+    if (!items.length) {
+      box.innerHTML =
+        '<div class="empty-state"><h2>Your wishlist is empty</h2><p>Tap the heart on a gift to save it here.</p><a href="shop.html">Explore Gifts</a></div>';
+      updateCounters();
+      return;
+    }
 
-  toast.textContent = message;
-  toast.className = "toast " + type + " show";
+    box.innerHTML = "";
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
-}
+    items.forEach((item, index) => {
+      const card = document.createElement("article");
+      card.className = "wishlist-card";
+
+      card.innerHTML = `
+        <img src="${item.image || ""}" alt="${item.name || "Gift"}">
+        <div class="wishlist-info">
+          <h3>${item.name || "Gift"}</h3>
+          <div class="wishlist-price">Rs. ${Number(item.price || 0).toLocaleString()}</div>
+          <div class="wishlist-actions">
+            <button class="wishlist-add" data-add="${index}">Add to Cart</button>
+            <button class="wishlist-remove" data-remove="${index}">Remove</button>
+          </div>
+        </div>
+      `;
+
+      box.appendChild(card);
+    });
+
+    updateCounters();
+  }
+
+  document.addEventListener("click", function (event) {
+    const add = event.target.closest("[data-add]");
+    const remove = event.target.closest("[data-remove]");
+
+    if (add) {
+      const wishlist = get(WISHLIST_KEY);
+      const item = wishlist[Number(add.dataset.add)];
+
+      if (!item) return;
+
+      const cart = get(CART_KEY);
+      const existing = cart.find((x) => x.name === item.name);
+
+      if (existing) {
+        existing.quantity = Number(existing.quantity || 1) + 1;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+
+      save(CART_KEY, cart);
+      wishlist.splice(Number(add.dataset.add), 1);
+      save(WISHLIST_KEY, wishlist);
+
+      render();
+      toast("Added to cart ✓");
+    }
+
+    if (remove) {
+      const wishlist = get(WISHLIST_KEY);
+      wishlist.splice(Number(remove.dataset.remove), 1);
+      save(WISHLIST_KEY, wishlist);
+
+      render();
+      toast("Removed from wishlist");
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    render();
+    updateCounters();
+  });
+
+  window.addEventListener("storage", function () {
+    render();
+    updateCounters();
+  });
+})();

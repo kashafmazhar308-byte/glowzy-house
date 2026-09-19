@@ -1,115 +1,174 @@
-// ==============================
-// Glowzy House - cart.js
-// ==============================
+// ==========================================
+// Glowzy House - Cart JS
+// ==========================================
+(function () {
+  "use strict";
 
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const CART_KEY = "cart";
+  const WISHLIST_KEY = "wishlist";
 
-const cartItems = document.getElementById("cart-items");
-const cartTotal = document.getElementById("cart-total");
-const cartCount = document.querySelector(".cart-count");
+  const getCart = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem(CART_KEY));
+      return Array.isArray(value) ? value : [];
+    } catch (error) {
+      return [];
+    }
+  };
 
-function updateCartCount() {
-  if (cartCount) {
-    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const saveCart = (cart) => {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  };
 
-    cartCount.textContent = total;
-  }
-}
-
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function displayCart() {
-  if (!cartItems) return;
-
-  cartItems.innerHTML = "";
-
-  if (cart.length === 0) {
-    cartItems.innerHTML = `
-<div class="empty-cart">
-
-    <i class="fa-solid fa-cart-shopping"></i>
-
-    <h2>Your cart is empty</h2>
-
-    <p>Add some beautiful hampers to your cart.</p>
-
-    <a href="shop.html" class="continue-btn">
-        Continue Shopping
-    </a>
-
-</div>
-`;
-
-    cartTotal.textContent = "Rs. 0";
-
-    updateCartCount();
-
-    return;
+  function cartCount() {
+    return getCart().reduce(
+      (sum, item) => sum + Number(item.quantity || 1),
+      0
+    );
   }
 
-  let totalPrice = 0;
+  function updateCounters() {
+    document.querySelectorAll(".cart-count").forEach((el) => {
+      el.textContent = cartCount();
+    });
 
-  cart.forEach((item, index) => {
-    totalPrice += item.price * item.quantity;
+    let wishlistCount = 0;
+    try {
+      const wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY));
+      wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
+    } catch (error) {}
 
-    cartItems.innerHTML += `
+    document.querySelectorAll(".wishlist-count").forEach((el) => {
+      el.textContent = wishlistCount;
+    });
+  }
 
-        <div class="cart-item">
+  function toast(message) {
+    const el = document.getElementById("toast");
+    if (!el) return;
 
-            <img src="${item.image}" alt="${item.name}">
+    el.textContent = message;
+    el.classList.add("show");
 
-            <div class="cart-details">
+    clearTimeout(window.glowzyCartToast);
+    window.glowzyCartToast = setTimeout(
+      () => el.classList.remove("show"),
+      1800
+    );
+  }
 
-                <h3>${item.name}</h3>
+  function render() {
+    const box = document.getElementById("cart-items");
+    const totalEl = document.getElementById("cart-total");
 
-                <p>Rs. ${item.price}</p>
+    if (!box) return;
 
-                <div class="quantity">
+    const items = getCart();
 
-                    <button onclick="changeQuantity(${index},-1)">−</button>
+    if (!items.length) {
+      box.innerHTML =
+        '<div class="empty-cart"><h2>Your cart is empty</h2><p>Choose a beautiful gift from our collection.</p><a class="checkout-btn" href="shop.html">Explore Gifts</a></div>';
 
-                    <span>${item.quantity}</span>
+      if (totalEl) totalEl.textContent = "Rs. 0";
+      updateCounters();
+      return;
+    }
 
-                    <button onclick="changeQuantity(${index},1)">+</button>
+    box.innerHTML = "";
+    let total = 0;
 
-                </div>
+    items.forEach((item, index) => {
+      const quantity = Math.max(1, Number(item.quantity || 1));
+      const price = Number(item.price || 0);
+      const lineTotal = quantity * price;
 
-            </div>
+      total += lineTotal;
 
-            <button class="remove-btn" onclick="removeItem(${index})">
-    <i class="fa-solid fa-trash"></i>
-</button>
+      const row = document.createElement("div");
+      row.className = "cart-item";
 
+      row.innerHTML = `
+        <img src="${item.image || ""}" alt="${item.name || "Gift"}">
+
+        <div>
+          <h3>${item.name || "Gift"}</h3>
+          <p>Glowzy House Gift</p>
+          <div class="cart-item-price">Rs. ${price.toLocaleString()}</div>
+
+          <div class="quantity-controls">
+            <button type="button" data-minus="${index}">−</button>
+            <span>${quantity}</span>
+            <button type="button" data-plus="${index}">+</button>
+          </div>
         </div>
 
-        `;
-  });
+        <div class="cart-actions">
+          <strong>Rs. ${lineTotal.toLocaleString()}</strong>
+          <br>
+          <button type="button" data-remove="${index}">Remove</button>
+        </div>
+      `;
 
-  cartTotal.textContent = "Rs. " + totalPrice.toLocaleString();
+      box.appendChild(row);
+    });
 
-  updateCartCount();
-}
+    if (totalEl) {
+      totalEl.textContent = "Rs. " + total.toLocaleString();
+    }
 
-function changeQuantity(index, amount) {
-  cart[index].quantity += amount;
-
-  if (cart[index].quantity <= 0) {
-    cart.splice(index, 1);
+    updateCounters();
   }
 
-  saveCart();
+  document.addEventListener("click", function (event) {
+    const plus = event.target.closest("[data-plus]");
+    const minus = event.target.closest("[data-minus]");
+    const remove = event.target.closest("[data-remove]");
 
-  displayCart();
-}
+    if (plus) {
+      const cart = getCart();
+      const index = Number(plus.dataset.plus);
 
-function removeItem(index) {
-  cart.splice(index, 1);
+      if (!cart[index]) return;
 
-  saveCart();
+      cart[index].quantity = Number(cart[index].quantity || 1) + 1;
+      saveCart(cart);
+      render();
+      return;
+    }
 
-  displayCart();
-}
+    if (minus) {
+      const cart = getCart();
+      const index = Number(minus.dataset.minus);
 
-displayCart();
+      if (!cart[index]) return;
+
+      cart[index].quantity = Math.max(
+        1,
+        Number(cart[index].quantity || 1) - 1
+      );
+
+      saveCart(cart);
+      render();
+      return;
+    }
+
+    if (remove) {
+      const cart = getCart();
+      cart.splice(Number(remove.dataset.remove), 1);
+
+      saveCart(cart);
+      render();
+      toast("Removed from cart");
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    render();
+    updateCounters();
+  });
+
+  window.addEventListener("storage", function () {
+    render();
+    updateCounters();
+  });
+})();

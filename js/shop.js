@@ -1,674 +1,288 @@
-// ==============================
-// Glowzy House - shop.js
-// ==============================
+// ==========================================
+// Glowzy House - Shop JS
+// Cart + Wishlist + Search + Sort + Categories
+// ==========================================
+(function () {
+  "use strict";
 
-// ==============================
-// CART
-// ==============================
+  const CART_KEY = "cart";
+  const WISHLIST_KEY = "wishlist";
 
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
-const cartCount = document.querySelector(".cart-count");
+  const read = (key) => {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return Array.isArray(value) ? value : [];
+    } catch (error) {
+      return [];
+    }
+  };
 
-// Update Cart Count
-function updateCartCount() {
-  if (cartCount) {
-    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const write = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
 
-    cartCount.textContent = totalItems;
+  function getCartCount() {
+    return read(CART_KEY).reduce(
+      (total, item) => total + Number(item.quantity || 1),
+      0
+    );
   }
-}
 
-updateCartCount();
+  function updateCounters() {
+    document.querySelectorAll(".cart-count").forEach((el) => {
+      el.textContent = getCartCount();
+    });
 
-// Add To Cart
-document.querySelectorAll(".cart-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    const product = {
-      name: button.dataset.name,
-      price: Number(button.dataset.price),
-      image: button.dataset.image,
-      quantity: 1,
+    document.querySelectorAll(".wishlist-count").forEach((el) => {
+      el.textContent = read(WISHLIST_KEY).length;
+    });
+  }
+
+  function showToast(message) {
+    let toast = document.getElementById("toast");
+
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toast";
+      toast.className = "toast";
+      document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(window.glowzyToastTimer);
+    window.glowzyToastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 1800);
+  }
+
+  function getProductFromCard(card) {
+    if (!card) return null;
+
+    const button = card.querySelector(".cart-btn");
+
+    const name =
+      button?.dataset.name ||
+      card.dataset.name ||
+      card.querySelector("h3")?.textContent.trim() ||
+      "Gift";
+
+    const priceText =
+      button?.dataset.price ||
+      card.querySelector("h4")?.textContent.replace(/[^\d.]/g, "") ||
+      "0";
+
+    const image =
+      button?.dataset.image ||
+      card.querySelector(".product-image img")?.getAttribute("src") ||
+      "";
+
+    return {
+      name: name.trim(),
+      price: Number(priceText) || 0,
+      image: image,
+      quantity: 1
     };
+  }
 
+  function addToCart(product) {
+    const cart = read(CART_KEY);
     const existing = cart.find((item) => item.name === product.name);
 
     if (existing) {
-      existing.quantity++;
+      existing.quantity = Number(existing.quantity || 1) + 1;
     } else {
       cart.push(product);
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    updateCartCount();
-
-    showToast(product.name + " added to cart!");
-  });
-});
-
-// ==============================
-// PRODUCT DETAILS
-// ==============================
-
-const details = {
-  "Luxury Gift Hamper": {
-    image: "images/basket1.jpeg",
-    price: "Rs. 4,499",
-
-    description:
-      "A premium snack gift basket beautifully arranged with chocolates, chips, soft drinks, juice and a birthday card. Handcrafted with elegant black floral decoration, making it a perfect surprise for your loved ones.",
-
-    items: [
-      "Lays Chips",
-      "Cadbury Eclairs",
-      "Cup Cakes",
-      "Cheetos",
-      "Coca-Cola",
-      "Mixed Snacks",
-      "Juice Pack",
-      "Birthday Card",
-      "Decorative Basket",
-    ],
-
-    delivery:
-      "Same day delivery in Lahore. Nationwide delivery in 2-4 working days.",
-
-    occasion: "Birthday, Anniversary, Surprise Gift",
-  },
-
-  "Chocolate Hamper": {
-    image: "images/basket2.jpeg",
-    price: "Rs. 3,299",
-
-    description:
-      "A luxury chocolate bouquet featuring premium chocolates wrapped in elegant transparent gift packaging with a decorative ribbon.",
-
-    items: [
-      "Ferrero Rocher",
-      "Kinder Bueno",
-      "Cadbury Dairy Milk",
-      "Snickers",
-      "5 Star",
-      "Munch",
-      "Dark Chocolate",
-      "Luxury Gift Wrapping",
-    ],
-
-    delivery: "Nationwide delivery available.",
-
-    occasion: "Birthday, Anniversary, Valentine's Day",
-  },
-
-  "Birthday Hamper": {
-    image: "images/basket3.jpeg",
-    price: "Rs. 3,799",
-
-    description:
-      "A classic birthday snack basket filled with popular chips, chocolates, donuts, drinks and premium treats in an elegant basket.",
-
-    items: [
-      "Lays",
-      "Super Crisps",
-      "Kurkure",
-      "Donut Cake",
-      "Ferrero Rocher",
-      "Chocolate Bars",
-      "Soft Drink",
-      "Decorative Basket",
-    ],
-
-    delivery: "Same day delivery in Lahore.",
-
-    occasion: "Birthday, Congratulations, Friends Gift",
-  },
-
-  "Baby Gift Basket": {
-    image: "images/basket4.jpeg",
-    price: "Rs. 5,499",
-
-    description:
-      "A beautiful newborn gift basket with premium baby care essentials presented in an elegant handcrafted basket.",
-
-    items: [
-      "Baby Powder",
-      "Baby Lotion",
-      "Baby Oil",
-      "Baby Cream",
-      "Baby Soap",
-      "Baby Bottle",
-      "Decorative Basket",
-    ],
-
-    delivery: "Nationwide delivery available.",
-
-    occasion: "Baby Shower, Newborn Gift",
-  },
-
-  "Coffee Lover Basket": {
-    image: "images/basket5.jpeg",
-    price: "Rs. 4,999",
-
-    description:
-      "Luxury coffee gift box featuring premium coffee, chocolates, cookies and a stylish coffee mug in elegant packaging.",
-
-    items: [
-      "Nescafe Gold",
-      "Lindt Chocolate",
-      "Pringles",
-      "Coffee Mug",
-      "Coffee Cookies",
-      "Premium Gift Box",
-    ],
-
-    delivery: "Delivery all over Pakistan.",
-
-    occasion: "Corporate Gift, Birthday, Thank You",
-  },
-
-  "Wedding Hamper": {
-    image: "images/basket6.jpeg",
-    price: "Rs. 5,999",
-
-    description:
-      "A beautifully handcrafted wedding gift basket featuring premium gifts, elegant floral decorations, luxury chocolates, scented candles, and exquisite wrapping. Perfect for celebrating weddings with style and creating unforgettable memories.",
-
-    items: [
-      "Fresh Artificial Flowers",
-      "Ferrero Rocher Chocolates",
-      "Luxury Scented Candle",
-      "Premium Body Care Set",
-      "Decorative Wedding Card",
-      "Elegant Gift Box",
-      "Luxury Ribbon Decoration",
-      "Fairy Lights",
-      "Premium Wicker Basket",
-    ],
-
-    delivery: "Nationwide delivery available.",
-
-    occasion: "Wedding, Engagement, Anniversary",
-  },
-
-  "EID Basket": {
-    image: "images/basket7.jpeg",
-    price: "Rs. 2,999",
-
-    description:
-      "A traditional floral gift basket beautifully decorated with fresh flowers, bangles and accessories for special celebrations.",
-
-    items: [
-      "Fresh Flowers",
-      "Decorative Bangles",
-      "Jewellery Accessories",
-      "Henna Cones",
-      "Greeting Card",
-      "Handmade Basket",
-    ],
-
-    delivery: "Delivery available across Pakistan.",
-
-    occasion: "Mehndi, Wedding, Engagement",
-  },
-
-  "Premium Surprise Box": {
-    image: "images/basket8.jpeg",
-    price: "Rs. 6,999",
-
-    description:
-      "An elegant premium acrylic surprise box filled with Ferrero Rocher, chocolates, Pringles and luxury snacks, beautifully decorated with flowers and ribbons.",
-
-    items: [
-      "Ferrero Rocher",
-      "Pringles",
-      "Snickers",
-      "Toblerone",
-      "Premium Chocolates",
-      "Luxury Acrylic Box",
-      "Floral Decoration",
-    ],
-
-    delivery: "Premium nationwide delivery.",
-
-    occasion: "Birthday, Anniversary, Luxury Gift, Corporate Gift",
-  },
-
-  "Premium Birthday Basket": {
-    image: "images/basket12.jpeg",
-    price: "Rs. 13,999",
-
-    description:
-      "A luxurious premium birthday basket beautifully arranged with Ferrero Rocher chocolates, teddy bear, fresh flowers, premium snacks, greeting card and elegant gift wrapping. Perfect for making birthdays extra special.",
-
-    items: [
-      "Premium Teddy Bear",
-      "Ferrero Rocher",
-      "Pringles",
-      "KitKat",
-      "Kinder Bueno",
-      "Dairy Milk Silk",
-      "Fresh Flowers",
-      "Birthday Greeting Card",
-      "Luxury Ribbon Decoration",
-      "Premium Wicker Basket",
-    ],
-
-    delivery:
-      "Same day delivery in Lahore. Nationwide delivery in 2-4 working days.",
-
-    occasion: "Birthday, Surprise Gift, Anniversary, Special Occasion",
-  },
-
-  "Classic Birthday Basket": {
-    image: "images/basket123.jpeg",
-    price: "Rs. 6,000",
-
-    description:
-      "A beautifully arranged Classic Birthday Basket featuring a delicious cake, Coca-Cola can, premium chocolates, snacks, birthday card, and elegant gift wrapping. Perfect for making birthdays memorable.",
-
-    items: [
-      "Birthday Cake",
-      "Coca-Cola Can",
-      "Premium Chocolates",
-      "Mixed Snacks",
-      "Birthday Greeting Card",
-      "Decorative Basket",
-      "Luxury Net Wrapping",
-    ],
-
-    delivery: "Same day delivery in Lahore. Nationwide delivery available.",
-
-    occasion: "Birthday, Surprise Gift, Family, Friends",
-  },
-};
-
-// ==============================
-// MODAL ELEMENTS
-// ==============================
-
-const modal = document.getElementById("productModal");
-
-const modalImg = document.getElementById("modal-img");
-
-const modalTitle = document.getElementById("modal-title");
-
-const modalPrice = document.getElementById("modal-price");
-
-const modalDesc = document.getElementById("modal-desc");
-
-const modalItems = document.getElementById("modal-items");
-
-const modalDelivery = document.getElementById("modal-delivery");
-
-const modalOccasion = document.getElementById("modal-occasion");
-
-// ==============================
-// OPEN PRODUCT DETAILS
-// ==============================
-
-function openProductDetails(card) {
-  if (!card || !modal) return;
-
-  const nameElement = card.querySelector("h3");
-
-  if (!nameElement) return;
-
-  const name = nameElement.innerText.trim();
-
-  const product = details[name];
-
-  if (!product) {
-    alert("Product details not found.");
-    return;
+    write(CART_KEY, cart);
+    updateCounters();
+    showToast(product.name + " added to cart ✓");
   }
 
-  // Product Image
-  if (modalImg) {
-    modalImg.src = product.image;
+  function toggleWishlist(product, heart) {
+    const wishlist = read(WISHLIST_KEY);
+    const index = wishlist.findIndex((item) => item.name === product.name);
 
-    modalImg.alt = name;
+    if (index >= 0) {
+      wishlist.splice(index, 1);
+      write(WISHLIST_KEY, wishlist);
+      showToast("Removed from wishlist");
+    } else {
+      wishlist.push(product);
+      write(WISHLIST_KEY, wishlist);
+      showToast("Added to wishlist ❤️");
+    }
+
+    updateCounters();
+    syncHeart(heart, product.name);
   }
 
-  // Product Name
-  if (modalTitle) {
-    modalTitle.innerText = name;
+  function syncHeart(heart, productName) {
+    if (!heart) return;
+
+    const exists = read(WISHLIST_KEY).some(
+      (item) => item.name === productName
+    );
+
+    // script.js also handles the icon classes. This only runs after its
+    // click handler so the final visual state matches localStorage.
+    setTimeout(() => {
+      heart.classList.toggle("fa-solid", exists);
+      heart.classList.toggle("fa-regular", !exists);
+      heart.classList.toggle("active", exists);
+    }, 0);
   }
 
-  // Product Price
-  if (modalPrice) {
-    modalPrice.innerText = product.price;
-  }
-
-  // Description
-  if (modalDesc) {
-    modalDesc.innerText = product.description;
-  }
-
-  // Product Items
-  if (modalItems) {
-    modalItems.innerHTML = "";
-
-    product.items.forEach((item) => {
-      const li = document.createElement("li");
-
-      li.textContent = item;
-
-      modalItems.appendChild(li);
+  function syncAllHearts() {
+    document.querySelectorAll(".wishlist").forEach((heart) => {
+      const card = heart.closest(".product-card");
+      const product = getProductFromCard(card);
+      if (product) syncHeart(heart, product.name);
     });
   }
 
-  // Delivery
-  if (modalDelivery) {
-    modalDelivery.innerText = product.delivery || "Delivery available.";
-  }
+  // Cart + wishlist clicks
+  document.addEventListener("click", function (event) {
+    const cartButton = event.target.closest(".cart-btn");
+    const heart = event.target.closest(".wishlist");
 
-  // Occasion
-  if (modalOccasion) {
-    modalOccasion.innerText =
-      product.occasion || "Perfect for every special occasion.";
-  }
+    if (cartButton) {
+      event.preventDefault();
+      const card = cartButton.closest(".product-card");
+      const product = getProductFromCard(card);
+      if (product) addToCart(product);
+      return;
+    }
 
-  // Open Modal
-  modal.classList.add("active");
+    if (heart) {
+      event.preventDefault();
+      const card = heart.closest(".product-card");
+      const product = getProductFromCard(card);
 
-  // Prevent Background Scroll
-  document.body.style.overflow = "hidden";
-}
+      if (product) {
+        // Prevent script.js from causing a second visual toggle only;
+        // the actual saved state is controlled here.
+        toggleWishlist(product, heart);
+      }
+      return;
+    }
 
-// ==============================
-// VIEW DETAILS BUTTON
-// ==============================
+    const viewButton = event.target.closest(".view-btn");
+    if (viewButton) {
+      event.preventDefault();
 
-document.querySelectorAll(".view-btn").forEach((button) => {
-  button.addEventListener("click", function (e) {
-    e.preventDefault();
+      const card = viewButton.closest(".product-card");
+      const product = getProductFromCard(card);
+      const modal = document.getElementById("productModal");
 
-    const card = this.closest(".product-card");
+      if (!card || !modal || !product) return;
 
-    openProductDetails(card);
-  });
-});
+      const img = document.getElementById("modal-img");
+      const title = document.getElementById("modal-title");
+      const price = document.getElementById("modal-price");
+      const desc = document.getElementById("modal-desc");
+      const items = document.getElementById("modal-items");
+      const delivery = document.getElementById("modal-delivery");
+      const occasion = document.getElementById("modal-occasion");
 
-// ==============================
-// PRODUCT IMAGE CLICK
-// ==============================
+      if (img) img.src = product.image;
+      if (title) title.textContent = product.name;
+      if (price) price.textContent = "Rs. " + product.price.toLocaleString();
+      if (desc) desc.textContent = "A beautifully prepared Glowzy House gift, packed with care.";
+      if (items) items.innerHTML = "<li>Premium gift presentation</li><li>Beautiful packaging</li><li>Personalized touch available</li>";
+      if (delivery) delivery.textContent = "Lahore delivery available. Please order at least 2 days in advance.";
+      if (occasion) occasion.textContent = card.dataset.category || "Special occasions";
 
-document.querySelectorAll(".product-card img").forEach((image) => {
-  image.style.cursor = "pointer";
+      modal.classList.add("active");
+    }
 
-  image.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const card = this.closest(".product-card");
-
-    openProductDetails(card);
-  });
-});
-
-// ==============================
-// CLOSE MODAL
-// ==============================
-
-const closeModalButton = document.querySelector(".close-modal");
-
-if (closeModalButton) {
-  closeModalButton.addEventListener("click", () => {
-    if (modal) {
-      modal.classList.remove("active");
-
-      document.body.style.overflow = "";
+    if (event.target.closest(".close-modal")) {
+      document.getElementById("productModal")?.classList.remove("active");
     }
   });
-}
 
-// ==============================
-// CLOSE OUTSIDE MODAL
-// ==============================
+  // Search
+  const searchInput = document.getElementById("searchInput");
 
-window.addEventListener("click", (e) => {
-  if (modal && e.target === modal) {
-    modal.classList.remove("active");
-
-    document.body.style.overflow = "";
-  }
-});
-
-// ==============================
-// CLOSE WITH ESC
-// ==============================
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && modal && modal.classList.contains("active")) {
-    modal.classList.remove("active");
-
-    document.body.style.overflow = "";
-  }
-});
-
-// ==============================
-// SEARCH PRODUCTS
-// ==============================
-
-const searchInput = document.getElementById("searchInput");
-
-if (searchInput) {
-  searchInput.addEventListener("input", function () {
-    const value = this.value.toLowerCase().trim();
+  function filterProducts() {
+    const query = (searchInput?.value || "").trim().toLowerCase();
 
     document.querySelectorAll(".product-card").forEach((card) => {
-      const productName = card.querySelector("h3").innerText.toLowerCase();
-
-      if (productName.includes(value)) {
-        card.style.display = "";
-      } else {
-        card.style.display = "none";
-      }
+      const text = card.textContent.toLowerCase();
+      const matches = !query || text.includes(query);
+      card.style.display = matches ? "" : "none";
     });
-  });
-}
-
-// ==============================
-// CATEGORY FILTER
-// ==============================
-
-const categoryButtons = document.querySelectorAll(".shop-categories button");
-
-const productCards = document.querySelectorAll(".product-card");
-
-categoryButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    categoryButtons.forEach((btn) => btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    const category = button.innerText.toLowerCase();
-
-    productCards.forEach((card) => {
-      const cardCategory = (card.dataset.category || "").toLowerCase();
-
-      if (category === "all") {
-        card.style.display = "";
-      } else if (cardCategory.includes(category)) {
-        card.style.display = "";
-      } else {
-        card.style.display = "none";
-      }
-    });
-  });
-});
-// ==============================
-// CATEGORY FROM HOME PAGE
-// ==============================
-
-const urlParams = new URLSearchParams(window.location.search);
-
-const selectedCategory = urlParams.get("category");
-
-if (selectedCategory) {
-  const category = selectedCategory.toLowerCase();
-
-  productCards.forEach((card) => {
-    const categories = (card.dataset.category || "").toLowerCase();
-
-    if (categories.includes(category)) {
-      card.style.display = "";
-    } else {
-      card.style.display = "none";
-    }
-  });
-
-  // Activate matching category button
-  categoryButtons.forEach((button) => {
-    if (button.innerText.toLowerCase().includes(category)) {
-      button.classList.add("active");
-    }
-  });
-}
-
-// ==============================
-// WISHLIST
-// ==============================
-
-let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
-const wishlistCount = document.querySelector(".wishlist-count");
-
-function updateWishlistCount() {
-  if (wishlistCount) {
-    wishlistCount.textContent = wishlist.length;
-  }
-}
-
-updateWishlistCount();
-
-document.querySelectorAll(".wishlist").forEach((heart) => {
-  const card = heart.closest(".product-card");
-
-  if (!card) return;
-
-  const name = card.querySelector("h3").innerText.trim();
-
-  const image = card.querySelector("img").getAttribute("src");
-
-  const price = card.querySelector("h4").innerText;
-
-  if (wishlist.find((item) => item.name === name)) {
-    heart.classList.remove("fa-regular");
-
-    heart.classList.add("fa-solid", "active");
   }
 
-  heart.addEventListener("click", () => {
-    const index = wishlist.findIndex((item) => item.name === name);
+  searchInput?.addEventListener("input", filterProducts);
 
-    if (index === -1) {
-      wishlist.push({
-        name,
-        image,
-        price,
+  // Categories
+  document.querySelectorAll(".shop-categories button").forEach((button) => {
+    button.addEventListener("click", function () {
+      document
+        .querySelectorAll(".shop-categories button")
+        .forEach((btn) => btn.classList.remove("active"));
+
+      this.classList.add("active");
+
+      const category = this.textContent.trim().toLowerCase();
+
+      document.querySelectorAll(".product-card").forEach((card) => {
+        const categories = (card.dataset.category || "").toLowerCase();
+        card.style.display =
+          category === "all" || categories.includes(category) ? "" : "none";
       });
-
-      heart.classList.remove("fa-regular");
-
-      heart.classList.add("fa-solid", "active");
-
-      showToast(name + " added to wishlist ❤️");
-    } else {
-      wishlist.splice(index, 1);
-
-      heart.classList.remove("fa-solid", "active");
-
-      heart.classList.add("fa-regular");
-
-      showToast(name + " removed from wishlist", "error");
-    }
-
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
-    updateWishlistCount();
+    });
   });
-});
 
-// ==============================
-// TOAST
-// ==============================
+  // Sort
+  const sortSelect = document.getElementById("sortProducts");
+  const grid = document.querySelector(".product-grid");
 
-function showToast(message, type = "success") {
-  const toast = document.getElementById("toast");
+  sortSelect?.addEventListener("change", function () {
+    if (!grid) return;
 
-  if (!toast) return;
+    const cards = Array.from(grid.querySelectorAll(".product-card"));
 
-  toast.textContent = message;
+    cards.sort((a, b) => {
+      const aProduct = getProductFromCard(a);
+      const bProduct = getProductFromCard(b);
 
-  toast.className = "toast " + type + " show";
+      switch (this.value) {
+        case "low-high":
+          return aProduct.price - bProduct.price;
+        case "high-low":
+          return bProduct.price - aProduct.price;
+        case "az":
+          return aProduct.name.localeCompare(bProduct.name);
+        case "za":
+          return bProduct.name.localeCompare(aProduct.name);
+        default:
+          return 0;
+      }
+    });
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
-}
-
-// ==============================
-// PRODUCT SORTING
-// ==============================
-
-const sortSelect = document.getElementById("sortProducts");
-
-const productGrid = document.querySelector(".product-grid");
-
-if (sortSelect && productGrid) {
-  sortSelect.addEventListener("change", () => {
-    const cards = Array.from(productGrid.querySelectorAll(".product-card"));
-
-    switch (sortSelect.value) {
-      case "low-high":
-        cards.sort((a, b) => {
-          const priceA = parseInt(a.querySelector(".cart-btn").dataset.price);
-
-          const priceB = parseInt(b.querySelector(".cart-btn").dataset.price);
-
-          return priceA - priceB;
-        });
-
-        break;
-
-      case "high-low":
-        cards.sort((a, b) => {
-          const priceA = parseInt(a.querySelector(".cart-btn").dataset.price);
-
-          const priceB = parseInt(b.querySelector(".cart-btn").dataset.price);
-
-          return priceB - priceA;
-        });
-
-        break;
-
-      case "az":
-        cards.sort((a, b) => {
-          const nameA = a.querySelector("h3").innerText;
-
-          const nameB = b.querySelector("h3").innerText;
-
-          return nameA.localeCompare(nameB);
-        });
-
-        break;
-
-      case "za":
-        cards.sort((a, b) => {
-          const nameA = a.querySelector("h3").innerText;
-
-          const nameB = b.querySelector("h3").innerText;
-
-          return nameB.localeCompare(nameA);
-        });
-
-        break;
-
-      default:
-        location.reload();
-
-        return;
-    }
-
-    cards.forEach((card) => productGrid.appendChild(card));
+    cards.forEach((card) => grid.appendChild(card));
   });
-}
+
+  // Close modal when clicking outside
+  document.addEventListener("click", function (event) {
+    const modal = document.getElementById("productModal");
+
+    if (
+      modal &&
+      event.target === modal
+    ) {
+      modal.classList.remove("active");
+    }
+  });
+
+  window.addEventListener("storage", updateCounters);
+
+  document.addEventListener("DOMContentLoaded", function () {
+    updateCounters();
+    syncAllHearts();
+  });
+})();

@@ -112,3 +112,56 @@ document.querySelectorAll(".home-cart-btn").forEach((button) => {
     }, 1500);
   });
 });
+
+
+/* =========================================================
+   GLOWZY HOUSE — UX UPGRADE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Keep cart count correct after refresh.
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalItems = cart.reduce((total, item) => total + Number(item.quantity || 0), 0);
+    document.querySelectorAll(".cart-count").forEach(el => {
+      el.textContent = totalItems;
+    });
+  };
+
+  updateCartCount();
+
+  // Small success toast for home-page cart buttons.
+  document.querySelectorAll(".home-cart-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      updateCartCount();
+
+      const card = button.closest(".product-card");
+      const name = card?.querySelector("h3")?.textContent?.trim() || "Gift";
+
+      let toast = document.querySelector(".gh-toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.className = "gh-toast";
+        toast.setAttribute("role", "status");
+        document.body.appendChild(toast);
+      }
+
+      toast.textContent = `${name} added to your cart ✓`;
+      toast.classList.add("show");
+
+      clearTimeout(window.ghToastTimer);
+      window.ghToastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    });
+  });
+
+  // Make the search icon useful without changing the existing search system.
+  const searchLink = document.querySelector('.nav-icons a[href="#"]');
+  if (searchLink && !searchLink.dataset.searchReady) {
+    searchLink.dataset.searchReady = "true";
+    searchLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.location.href = "shop.html";
+    });
+    searchLink.setAttribute("aria-label", "Search gifts");
+  }
+});

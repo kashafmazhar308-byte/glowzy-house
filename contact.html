@@ -8,6 +8,7 @@
     <title>Contact | Glowzy House</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contact.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -37,29 +38,114 @@
 
 </ul>
 
-<div class="nav-icons">
 
-<a href="cart.html">
-<i class="fa-solid fa-cart-shopping"></i>
+            <div class="nav-icons">
+
+
+                <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+</a>
+<a href="wishlist.html" class="wishlist-icon">
+
+    <i class="fa-solid fa-heart"></i>
+
+    <span class="wishlist-count">0</span>
+
 </a>
 
-</div>
+            </div>
+
 
 </nav>
 
 </header>
 
 <!-- ================= HERO ================= -->
-
 <section class="contact-hero">
-
-<h1>Contact Us</h1>
-
-<p>We'd love to hear from you.</p>
-
+    <div class="contact-hero-inner">
+        <span class="eyebrow">LET’S CREATE SOMETHING SPECIAL</span>
+        <h1>Let’s Make Their Day Unforgettable</h1>
+        <p>Tell us what you have in mind and we’ll help you create a beautiful gift for your special person.</p>
+    </div>
 </section>
 
 <!-- ================= CONTACT ================= -->
+<section class="contact-section contact-updated">
+    <div class="contact-info">
+        <span class="eyebrow">GLOWZY HOUSE</span>
+        <h2>Order or Customize Your Gift</h2>
+        <p>Have a specific budget, occasion or gift idea? Send us the details. We offer customized hampers and premium gift packaging in Lahore.</p>
+
+        <div class="contact-points">
+            <div><i class="fa-solid fa-location-dot"></i><div><strong>Location</strong><span>Lahore, Pakistan</span></div></div>
+            <div><i class="fa-solid fa-envelope"></i><div><strong>Email</strong><a href="mailto:glowzyhouse.pk@gmail.com">glowzyhouse.pk@gmail.com</a></div></div>
+            <div><i class="fa-solid fa-clock"></i><div><strong>Custom Orders</strong><span>Please order at least 2 days in advance.</span></div></div>
+        </div>
+
+        <div class="contact-highlight">
+            <i class="fa-solid fa-gift"></i>
+            <div><strong>Not sure what to choose?</strong><span>Tell us your budget + occasion and we’ll suggest a gift.</span></div>
+        </div>
+    </div>
+
+    <div class="contact-form-card">
+        <div class="form-heading">
+            <span class="eyebrow">QUICK INQUIRY</span>
+            <h2>Send Your Gift Details</h2>
+        </div>
+        <form id="giftInquiryForm">
+            <div class="form-row">
+                <label> Your Name
+                    <input type="text" name="name" placeholder="Your name" required>
+                </label>
+                <label> Occasion
+                    <select name="occasion" required>
+                        <option value="">Select occasion</option>
+                        <option>Birthday</option>
+                        <option>Wedding</option>
+                        <option>Anniversary</option>
+                        <option>Baby Shower</option>
+                        <option>Graduation</option>
+                        <option>Eid</option>
+                        <option>Other</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-row">
+                <label> Budget
+                    <select name="budget" required>
+                        <option value="">Select budget</option>
+                        <option>Under Rs. 2,000</option>
+                        <option>Rs. 2,000 – 5,000</option>
+                        <option>Rs. 5,000 – 10,000</option>
+                        <option>Rs. 10,000+</option>
+                        <option>Custom Budget</option>
+                    </select>
+                </label>
+                <label> Preferred Date
+                    <input type="date" name="date">
+                </label>
+            </div>
+            <label> What would you like?
+                <textarea name="message" rows="5" placeholder="Tell us the recipient, gift idea, colors, chocolates, flowers or anything you'd like included..." required></textarea>
+            </label>
+            <button type="submit" class="contact-submit">Send Inquiry <i class="fa-solid fa-paper-plane"></i></button>
+            <p class="form-note">We’ll get back to you with suitable gift options and pricing.</p>
+            <div id="formMessage" class="form-message" aria-live="polite"></div>
+        </form>
+    </div>
+
+    <img src="images/logo.jpg" alt="Glowzy House Logo" class="contact-image" width="400" height="400">
+</section>
+
+<section class="contact-cta">
+    <div>
+        <span class="eyebrow">PERSONALIZED GIFTING</span>
+        <h2>Already Know What You Want?</h2>
+        <p>Share your idea with Glowzy House and let us turn it into a beautiful surprise.</p>
+    </div>
+    <a href="shop.html" class="cta-button">Browse Gifts <i class="fa-solid fa-arrow-right"></i></a>
+</section>
 
 <section class="contact-section">
 
@@ -146,6 +232,7 @@ We are always happy to help you choose the perfect luxury gift hamper.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/contact.js"></script>
 <script src="js/script.js"></script>
 
 </body>

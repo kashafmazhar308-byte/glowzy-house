@@ -1,166 +1,126 @@
-// ==============================
-// Glowzy House - checkout.js
-// ==============================
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("checkoutForm");
+  const toast = document.getElementById("toast");
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (!form) return;
 
-const checkoutItems = document.getElementById("checkout-items");
-const checkoutTotal = document.getElementById("checkout-total");
-const form = document.getElementById("checkoutForm");
+  function showToast(message) {
+    if (!toast) return;
 
-// ==============================
-// DISPLAY ORDER
-// ==============================
+    toast.textContent = message;
+    toast.classList.add("show");
 
-function displayCheckout() {
-  checkoutItems.innerHTML = "";
-
-  let total = 0;
-
-  if (cart.length === 0) {
-    checkoutItems.innerHTML = "<p>Your cart is empty.</p>";
-    checkoutTotal.textContent = "Rs. 0";
-    return;
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3500);
   }
 
-  cart.forEach((item) => {
-    total += item.price * item.quantity;
+  function getCart() {
+    try {
+      return JSON.parse(localStorage.getItem("cart")) || [];
+    } catch (error) {
+      console.error("Cart read error:", error);
+      return [];
+    }
+  }
 
-    checkoutItems.innerHTML += `
+  function getOrderDetails() {
+    const items = getCart();
 
-        <div class="checkout-item">
+    if (!items.length) {
+      return "No items found in cart.";
+    }
 
-            <div>
-                <h4>${item.name}</h4>
-                <small>Qty: ${item.quantity}</small>
-            </div>
+    return items
+      .map((item) => {
+        const quantity = Number(item.quantity || 1);
+        const price = Number(item.price || 0);
+        const subtotal = quantity * price;
 
-            <p>Rs. ${(item.price * item.quantity).toLocaleString()}</p>
+        return `${item.name || "Gift"} | Qty: ${quantity} | Rs. ${subtotal.toLocaleString()}`;
+      })
+      .join("\n");
+  }
 
-        </div>
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        `;
-  });
+    const submitButton = form.querySelector(".place-order");
 
-  checkoutTotal.textContent = "Rs. " + total.toLocaleString();
-}
+    const name = document.getElementById("name")?.value.trim() || "";
 
-displayCheckout();
+    const phone = document.getElementById("phone")?.value.trim() || "";
 
-// ==============================
-// PAYMENT METHOD
-// ==============================
+    const email = document.getElementById("email")?.value.trim() || "";
 
-const paymentOptions = document.querySelectorAll('input[name="payment"]');
-const bankDetails = document.getElementById("bankDetails");
+    const address = document.getElementById("address")?.value.trim() || "";
 
-paymentOptions.forEach((option) => {
-  option.addEventListener("change", function () {
-    if (this.value === "SadaPay") {
-      bankDetails.style.display = "block";
-    } else {
-      bankDetails.style.display = "none";
+    const paymentMethod =
+      document.querySelector('input[name="payment"]:checked')?.value ||
+      "Cash on Delivery";
+
+    const total =
+      document.getElementById("checkout-total")?.textContent.trim() || "Rs. 0";
+
+    const orderDetails = getOrderDetails();
+
+    if (!name || !phone || !address) {
+      showToast("Please fill in all required details.");
+      return;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending Order...";
+    }
+
+    const templateParams = {
+      customer_name: name,
+      customer_phone: phone,
+      customer_email: email || "Not provided",
+      customer_address: address,
+      payment_method: paymentMethod,
+      order_details: orderDetails,
+      total: total,
+    };
+
+    try {
+      await emailjs.send("service_7pt9p6a", "template_ig77ozj", templateParams);
+
+      localStorage.removeItem("cart");
+
+      showToast("Order placed successfully! Your order has been sent.");
+
+      form.reset();
+
+      const cod = document.querySelector(
+        'input[name="payment"][value="Cash on Delivery"]',
+      );
+
+      if (cod) {
+        cod.checked = true;
+      }
+
+      const bankDetails = document.getElementById("bankDetails");
+
+      if (bankDetails) {
+        bankDetails.style.display = "none";
+      }
+
+      setTimeout(() => {
+       window.location.href = "order-success.html";
+      }, 1800);
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+
+      showToast(
+        "Order could not be sent. Please try again or contact us directly.",
+      );
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Place Order";
+      }
     }
   });
 });
-
-// ==============================
-// PLACE ORDER
-// ==============================
-
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  if (cart.length === 0) {
-    showToast("Your cart is empty!", "error");
-    return;
-  }
-
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const email = document.getElementById("email").value;
-  const address = document.getElementById("address").value;
-
-  const payment = document.querySelector('input[name="payment"]:checked').value;
-
-  let message = `🌸 *Glowzy House Order*
-
-👤 Name: ${name}
-
-📞 Phone: ${phone}
-
-📧 Email: ${email}
-
-📍 Address:
-${address}
-
-💳 Payment:
-${payment}
-
------------------------
-
-🛍 Order Details
-
-`;
-
-  let total = 0;
-
-  cart.forEach((item) => {
-    message += `• ${item.name}
-
-Qty: ${item.quantity}
-
-Rs. ${(item.price * item.quantity).toLocaleString()}
-
-`;
-
-    total += item.price * item.quantity;
-  });
-
-  message += `-----------------------
-
-💰 Total: Rs. ${total.toLocaleString()}`;
-
-  if (payment === "SadaPay") {
-    showToast(
-      "Complete your SadaPay payment and send the screenshot on Email.",
-      "success",
-    );
-  }
-  const templateParams = {
-    customer_name: name,
-    customer_phone: phone,
-    customer_email: email,
-    customer_address: address,
-    payment_method: payment,
-    order_details: message,
-    total: "Rs. " + total.toLocaleString(),
-  };
-  emailjs
-    .send("service_7pt9p6a", "template_ig77ozj", templateParams)
-    .then(() => {
-      localStorage.removeItem("cart");
-
-      window.location.href = "order-success.html";
-    })
-    .catch((error) => {
-      console.error(error);
-      showToast("Failed to send order. Please try again.", "error");
-    });
-}); // ✅ Ye line missing thi
-// ==============================
-// TOAST NOTIFICATION
-// ==============================
-
-function showToast(message, type = "success") {
-  const toast = document.getElementById("toast");
-
-  if (!toast) return;
-
-  toast.textContent = message;
-  toast.className = "toast " + type + " show";
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
-}
