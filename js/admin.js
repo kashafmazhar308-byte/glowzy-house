@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dashboard: "Dashboard",
       products: "Products",
       orders: "Orders",
-      inquiries: "Inquiries",
+      inquiries: "Contact",
       customers: "Customers"
     };
 
