@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "sb_publishable_OaMCCPC97d20gh9qfRBS3Q_xwm3DJBJ";
 
   const isConfigured =
-    SUPABASE_URL.startsWith("https://") &&
-    SUPABASE_PUBLISHABLE_KEY.length > 20;
+    SUPABASE_URL.startsWith("https://") && SUPABASE_PUBLISHABLE_KEY.length > 20;
 
   const configNotice = document.getElementById("configNotice");
   const loginSection = document.getElementById("loginSection");
@@ -21,20 +20,17 @@ document.addEventListener("DOMContentLoaded", () => {
     products: document.getElementById("productsSection"),
     orders: document.getElementById("ordersSection"),
     inquiries: document.getElementById("inquiriesSection"),
-    customers: document.getElementById("customersSection")
+    customers: document.getElementById("customersSection"),
   };
 
   const supabaseClient = isConfigured
-    ? window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      )
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
     : null;
 
   let cache = {
     products: [],
     orders: [],
-    inquiries: []
+    inquiries: [],
   };
 
   if (!isConfigured) {
@@ -45,11 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!element) return;
     element.textContent = text;
     element.style.color =
-      type === "error"
-        ? "#b54e4e"
-        : type === "success"
-        ? "#3e7d58"
-        : "";
+      type === "error" ? "#b54e4e" : type === "success" ? "#3e7d58" : "";
   }
 
   function escapeHtml(value = "") {
@@ -67,10 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function parseMoney(value) {
     if (typeof value === "number") return value;
-    return Number(
-      String(value || "")
-        .replace(/[^\d.-]/g, "")
-    ) || 0;
+    return Number(String(value || "").replace(/[^\d.-]/g, "")) || 0;
   }
 
   function dateTime(value) {
@@ -78,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return new Date(value).toLocaleString("en-PK", {
       dateStyle: "medium",
-      timeStyle: "short"
+      timeStyle: "short",
     });
   }
 
@@ -88,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return new Date(value).toLocaleDateString("en-PK", {
       year: "numeric",
       month: "short",
-      day: "numeric"
+      day: "numeric",
     });
   }
 
@@ -132,17 +121,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showSection(name) {
     Object.entries(sections).forEach(([key, section]) => {
-      section.classList.toggle(
-        "active-section",
-        key === name
-      );
+      section.classList.toggle("active-section", key === name);
     });
 
     document.querySelectorAll(".nav-item").forEach((button) => {
-      button.classList.toggle(
-        "active",
-        button.dataset.section === name
-      );
+      button.classList.toggle("active", button.dataset.section === name);
     });
 
     const titles = {
@@ -150,11 +133,10 @@ document.addEventListener("DOMContentLoaded", () => {
       products: "Products",
       orders: "Orders",
       inquiries: "Contact",
-      customers: "Customers"
+      customers: "Customers",
     };
 
-    pageTitle.textContent =
-      titles[name] || "Dashboard";
+    pageTitle.textContent = titles[name] || "Dashboard";
   }
 
   document.querySelectorAll(".nav-item").forEach((button) => {
@@ -170,23 +152,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   async function loadAllData() {
-    const [productsResult, ordersResult, inquiriesResult] =
-      await Promise.all([
-        supabaseClient
-          .from("products")
-          .select("*")
-          .order("created_at", { ascending: false }),
+    const [productsResult, ordersResult, inquiriesResult] = await Promise.all([
+      supabaseClient
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false }),
 
-        supabaseClient
-          .from("orders")
-          .select("*")
-          .order("created_at", { ascending: false }),
+      supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false }),
 
-        supabaseClient
-          .from("inquiries")
-          .select("*")
-          .order("created_at", { ascending: false })
-      ]);
+      supabaseClient
+        .from("inquiries")
+        .select("*")
+        .order("created_at", { ascending: false }),
+    ]);
 
     if (productsResult.error) throw productsResult.error;
     if (ordersResult.error) throw ordersResult.error;
@@ -198,8 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getPeriodOrders() {
-    const period =
-      document.getElementById("salesPeriod").value;
+    const period = document.getElementById("salesPeriod").value;
 
     if (period === "all") {
       return cache.orders;
@@ -208,43 +188,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const now = new Date();
 
     if (period === "today") {
-      const start = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      );
+      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
       return cache.orders.filter(
-        (order) =>
-          new Date(order.created_at) >= start
+        (order) => new Date(order.created_at) >= start,
       );
     }
 
     const days = Number(period);
-    const cutoff = new Date(
-      now.getTime() -
-        days * 24 * 60 * 60 * 1000
-    );
+    const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
 
-    return cache.orders.filter(
-      (order) =>
-        new Date(order.created_at) >= cutoff
-    );
+    return cache.orders.filter((order) => new Date(order.created_at) >= cutoff);
   }
 
   function buildCustomers() {
     const map = new Map();
 
     cache.orders.forEach((order) => {
-      const key =
-        String(
-          order.phone ||
-          order.email ||
-          order.customer_name ||
-          ""
-        )
-          .trim()
-          .toLowerCase();
+      const key = String(
+        order.phone || order.email || order.customer_name || "",
+      )
+        .trim()
+        .toLowerCase();
 
       if (!key) return;
 
@@ -255,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
           email: order.email || "",
           orders: 0,
           spent: 0,
-          lastOrder: order.created_at
+          lastOrder: order.created_at,
         });
       }
 
@@ -264,18 +229,13 @@ document.addEventListener("DOMContentLoaded", () => {
       customer.orders += 1;
       customer.spent += parseMoney(order.total);
 
-      if (
-        new Date(order.created_at) >
-        new Date(customer.lastOrder)
-      ) {
+      if (new Date(order.created_at) > new Date(customer.lastOrder)) {
         customer.lastOrder = order.created_at;
       }
     });
 
     return Array.from(map.values()).sort(
-      (a, b) =>
-        new Date(b.lastOrder) -
-        new Date(a.lastOrder)
+      (a, b) => new Date(b.lastOrder) - new Date(a.lastOrder),
     );
   }
 
@@ -283,33 +243,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const periodOrders = getPeriodOrders();
 
     const sales = periodOrders.reduce(
-      (sum, order) =>
-        sum + parseMoney(order.total),
-      0
+      (sum, order) => sum + parseMoney(order.total),
+      0,
     );
 
     const customers = buildCustomers();
 
-    document.getElementById("statSales").textContent =
-      money(sales);
+    document.getElementById("statSales").textContent = money(sales);
 
-    document.getElementById("statOrders").textContent =
-      periodOrders.length;
+    document.getElementById("statOrders").textContent = periodOrders.length;
 
-    document.getElementById("statNewOrders").textContent =
-      periodOrders.filter(
-        (order) =>
-          String(order.status || "New").toLowerCase() ===
-          "new"
-      ).length;
+    document.getElementById("statNewOrders").textContent = periodOrders.filter(
+      (order) => String(order.status || "New").toLowerCase() === "new",
+    ).length;
 
-    document.getElementById("statCustomers").textContent =
-      customers.length;
+    document.getElementById("statCustomers").textContent = customers.length;
 
-    document.getElementById("statProducts").textContent =
-      cache.products.filter(
-        (product) => product.active
-      ).length;
+    document.getElementById("statProducts").textContent = cache.products.filter(
+      (product) => product.active,
+    ).length;
 
     document.getElementById("statInquiries").textContent =
       cache.inquiries.length;
@@ -319,14 +271,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderRecentOrders() {
-    const box =
-      document.getElementById("recentOrders");
+    const box = document.getElementById("recentOrders");
 
     const data = cache.orders.slice(0, 5);
 
     if (!data.length) {
-      box.innerHTML =
-        '<div class="empty-state">No orders yet.</div>';
+      box.innerHTML = '<div class="empty-state">No orders yet.</div>';
       return;
     }
 
@@ -349,19 +299,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   <td>${escapeHtml(order.customer_name)}</td>
                   <td>${escapeHtml(order.total || "Rs. 0")}</td>
                   <td>
-                    <span class="status ${statusClass(
-                      order.status
-                    )}">
-                      ${escapeHtml(
-                        order.status || "New"
-                      )}
+                    <span class="status ${statusClass(order.status)}">
+                      ${escapeHtml(order.status || "New")}
                     </span>
                   </td>
-                  <td>${escapeHtml(
-                    dateTime(order.created_at)
-                  )}</td>
+                  <td>${escapeHtml(dateTime(order.created_at))}</td>
                 </tr>
-              `
+              `,
             )
             .join("")}
         </tbody>
@@ -370,14 +314,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderRecentInquiries() {
-    const box =
-      document.getElementById("recentInquiries");
+    const box = document.getElementById("recentInquiries");
 
     const data = cache.inquiries.slice(0, 5);
 
     if (!data.length) {
-      box.innerHTML =
-        '<div class="empty-state">No inquiries yet.</div>';
+      box.innerHTML = '<div class="empty-state">No inquiries yet.</div>';
       return;
     }
 
@@ -401,16 +343,12 @@ document.addEventListener("DOMContentLoaded", () => {
                   <td>${escapeHtml(item.occasion)}</td>
                   <td>${escapeHtml(item.budget)}</td>
                   <td>
-                    <span class="status ${statusClass(
-                      item.status
-                    )}">
-                      ${escapeHtml(
-                        item.status || "New"
-                      )}
+                    <span class="status ${statusClass(item.status)}">
+                      ${escapeHtml(item.status || "New")}
                     </span>
                   </td>
                 </tr>
-              `
+              `,
             )
             .join("")}
         </tbody>
@@ -419,27 +357,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderProducts() {
-    const box =
-      document.getElementById("productsTable");
+    const box = document.getElementById("productsTable");
 
-    const query =
-      document
-        .getElementById("productSearch")
-        .value
-        .trim()
-        .toLowerCase();
+    const query = document
+      .getElementById("productSearch")
+      .value.trim()
+      .toLowerCase();
 
     const data = cache.products.filter((product) =>
-      `${product.name} ${product.category} ${
-        product.badge || ""
-      }`
+      `${product.name} ${product.category} ${product.badge || ""}`
         .toLowerCase()
-        .includes(query)
+        .includes(query),
     );
 
     if (!data.length) {
-      box.innerHTML =
-        '<div class="empty-state">No products found.</div>';
+      box.innerHTML = '<div class="empty-state">No products found.</div>';
       return;
     }
 
@@ -464,22 +396,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div style="display:flex;gap:10px;align-items:center">
                       <img
                         class="product-thumb"
-                        src="${escapeHtml(
-                          product.image
-                        )}"
+                        src="${escapeHtml(product.image)}"
                         alt=""
                       >
                       <div>
                         <strong>
-                          ${escapeHtml(
-                            product.name
-                          )}
+                          ${escapeHtml(product.name)}
                         </strong>
 
                         <div style="color:#8b7a6d;font-size:11px">
-                          ${escapeHtml(
-                            product.badge || ""
-                          )}
+                          ${escapeHtml(product.badge || "")}
                         </div>
                       </div>
                     </div>
@@ -488,9 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <td>${money(product.price)}</td>
 
                   <td>
-                    ${escapeHtml(
-                      product.category || "general"
-                    )}
+                    ${escapeHtml(product.category || "general")}
                   </td>
 
                   <td>${product.active ? "Yes" : "No"}</td>
@@ -509,108 +433,71 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                   </td>
                 </tr>
-              `
+              `,
             )
             .join("")}
         </tbody>
       </table>
     `;
 
-    box
-      .querySelectorAll("[data-edit-product]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          const product =
-            cache.products.find(
-              (item) =>
-                item.id ===
-                button.dataset.editProduct
-            );
+    box.querySelectorAll("[data-edit-product]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const product = cache.products.find(
+          (item) => item.id === button.dataset.editProduct,
+        );
 
-          openProductForm(product);
-        });
+        openProductForm(product);
       });
+    });
 
-    box
-      .querySelectorAll("[data-delete-product]")
-      .forEach((button) => {
-        button.addEventListener("click", async () => {
-          if (!confirm("Delete this product?")) {
-            return;
-          }
+    box.querySelectorAll("[data-delete-product]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        if (!confirm("Delete this product?")) {
+          return;
+        }
 
-          const { error } =
-            await supabaseClient
-              .from("products")
-              .delete()
-              .eq(
-                "id",
-                button.dataset.deleteProduct
-              );
+        const { error } = await supabaseClient
+          .from("products")
+          .delete()
+          .eq("id", button.dataset.deleteProduct);
 
-          if (error) {
-            setMessage(
-              globalMessage,
-              error.message,
-              "error"
-            );
-            return;
-          }
+        if (error) {
+          setMessage(globalMessage, error.message, "error");
+          return;
+        }
 
-          setMessage(
-            globalMessage,
-            "Product deleted.",
-            "success"
-          );
+        setMessage(globalMessage, "Product deleted.", "success");
 
-          await refreshAll();
-        });
+        await refreshAll();
       });
+    });
   }
 
   function renderOrders() {
-    const box =
-      document.getElementById("ordersTable");
+    const box = document.getElementById("ordersTable");
 
-    const query =
-      document
-        .getElementById("orderSearch")
-        .value
-        .trim()
-        .toLowerCase();
+    const query = document
+      .getElementById("orderSearch")
+      .value.trim()
+      .toLowerCase();
 
-    const statusFilter =
-      document.getElementById(
-        "orderStatusFilter"
-      ).value;
+    const statusFilter = document.getElementById("orderStatusFilter").value;
 
-    const data = cache.orders.filter(
-      (order) => {
-        const searchable =
-          `${order.customer_name || ""} ${
-            order.phone || ""
-          } ${order.address || ""} ${
-            order.email || ""
-          }`.toLowerCase();
+    const data = cache.orders.filter((order) => {
+      const searchable = `${order.customer_name || ""} ${
+        order.phone || ""
+      } ${order.address || ""} ${order.email || ""}`.toLowerCase();
 
-        const matchesSearch =
-          searchable.includes(query);
+      const matchesSearch = searchable.includes(query);
 
-        const matchesStatus =
-          statusFilter === "all" ||
-          (order.status || "New") ===
-            statusFilter;
+      const matchesStatus =
+        statusFilter === "all" || (order.status || "New") === statusFilter;
 
-        return (
-          matchesSearch &&
-          matchesStatus
-        );
-      }
-    );
+      return matchesSearch && matchesStatus;
+    });
 
     if (!data.length) {
-      box.innerHTML =
-        '<div class="empty-state">No orders found.</div>';
+      box.innerHTML = '<div class="empty-state">No orders found.</div>';
       return;
     }
 
@@ -634,47 +521,33 @@ document.addEventListener("DOMContentLoaded", () => {
             .map((order) => {
               let details = "";
 
-              if (
-                Array.isArray(order.order_details)
-              ) {
-                details =
-                  order.order_details
-                    .map(
-                      (item) =>
-                        `${item.name} ×${item.quantity}`
-                    )
-                    .join("<br>");
+              if (Array.isArray(order.order_details)) {
+                details = order.order_details
+                  .map((item) => `${item.name} ×${item.quantity}`)
+                  .join("<br>");
               } else {
-                details = String(
-                  order.order_details || ""
-                ).replaceAll("\n", "<br>");
+                details = String(order.order_details || "").replaceAll(
+                  "\n",
+                  "<br>",
+                );
               }
 
               return `
                 <tr>
                   <td>
                     <strong>
-                      ${escapeHtml(
-                        order.customer_name
-                      )}
+                      ${escapeHtml(order.customer_name)}
                     </strong>
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      order.phone
-                    )}
+                    ${escapeHtml(order.phone)}
                     <br>
-                    ${escapeHtml(
-                      order.email || ""
-                    )}
+                    ${escapeHtml(order.email || "")}
 
                     <div class="table-actions" style="margin-top:7px">
                       <a
-                        href="${whatsappLink(
-                          order.phone,
-                          order.customer_name
-                        )}"
+                        href="${whatsappLink(order.phone, order.customer_name)}"
                         target="_blank"
                         rel="noopener">
                         WhatsApp
@@ -683,21 +556,15 @@ document.addEventListener("DOMContentLoaded", () => {
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      order.address
-                    )}
+                    ${escapeHtml(order.address)}
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      order.payment_method
-                    )}
+                    ${escapeHtml(order.payment_method)}
                   </td>
 
                   <td class="customer-total">
-                    ${escapeHtml(
-                      order.total || "Rs. 0"
-                    )}
+                    ${escapeHtml(order.total || "Rs. 0")}
                   </td>
 
                   <td style="line-height:1.7">
@@ -705,36 +572,22 @@ document.addEventListener("DOMContentLoaded", () => {
                   </td>
 
                   <td>
-                    <select data-order-status="${
-                      order.id
-                    }">
-                      ${[
-                        "New",
-                        "Confirmed",
-                        "Packed",
-                        "Delivered",
-                        "Cancelled"
-                      ]
+                    <select data-order-status="${order.id}">
+                      ${["New", "Confirmed", "Packed", "Delivered", "Cancelled"]
                         .map(
                           (status) =>
                             `<option ${
-                              status ===
-                              (order.status ||
-                                "New")
+                              status === (order.status || "New")
                                 ? "selected"
                                 : ""
-                            }>${status}</option>`
+                            }>${status}</option>`,
                         )
                         .join("")}
                     </select>
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      dateTime(
-                        order.created_at
-                      )
-                    )}
+                    ${escapeHtml(dateTime(order.created_at))}
                   </td>
                 </tr>
               `;
@@ -744,91 +597,51 @@ document.addEventListener("DOMContentLoaded", () => {
       </table>
     `;
 
-    box
-      .querySelectorAll(
-        "[data-order-status]"
-      )
-      .forEach((select) => {
-        select.addEventListener(
-          "change",
-          async () => {
-            const { error } =
-              await supabaseClient
-                .from("orders")
-                .update({
-                  status: select.value
-                })
-                .eq(
-                  "id",
-                  select.dataset.orderStatus
-                );
+    box.querySelectorAll("[data-order-status]").forEach((select) => {
+      select.addEventListener("change", async () => {
+        const { error } = await supabaseClient
+          .from("orders")
+          .update({
+            status: select.value,
+          })
+          .eq("id", select.dataset.orderStatus);
 
-            if (error) {
-              setMessage(
-                globalMessage,
-                error.message,
-                "error"
-              );
-            } else {
-              setMessage(
-                globalMessage,
-                "Order status updated.",
-                "success"
-              );
+        if (error) {
+          setMessage(globalMessage, error.message, "error");
+        } else {
+          setMessage(globalMessage, "Order status updated.", "success");
 
-              await refreshAll();
-            }
-          }
-        );
+          await refreshAll();
+        }
       });
+    });
   }
 
   function renderInquiries() {
-    const box =
-      document.getElementById(
-        "inquiriesTable"
-      );
+    const box = document.getElementById("inquiriesTable");
 
-    const query =
-      document
-        .getElementById(
-          "inquirySearch"
-        )
-        .value
-        .trim()
-        .toLowerCase();
+    const query = document
+      .getElementById("inquirySearch")
+      .value.trim()
+      .toLowerCase();
 
-    const statusFilter =
-      document.getElementById(
-        "inquiryStatusFilter"
-      ).value;
+    const statusFilter = document.getElementById("inquiryStatusFilter").value;
 
-    const data =
-      cache.inquiries.filter((item) => {
-        const searchable =
-          `${item.name || ""} ${
-            item.occasion || ""
-          } ${item.budget || ""} ${
-            item.gift_details || ""
-          }`.toLowerCase();
+    const data = cache.inquiries.filter((item) => {
+      const searchable = `${item.name || ""} ${
+        item.occasion || ""
+      } ${item.budget || ""} ${item.gift_details || ""}`.toLowerCase();
 
-        const matchesSearch =
-          searchable.includes(query);
+      const matchesSearch = searchable.includes(query);
 
-        const matchesStatus =
-          statusFilter === "all" ||
-          (item.status || "New") ===
-            statusFilter;
+      const matchesStatus =
+        statusFilter === "all" || (item.status || "New") === statusFilter;
 
-        return (
-          matchesSearch &&
-          matchesStatus
-        );
-      });
+      return matchesSearch && matchesStatus;
+    });
 
     if (!data.length) {
-      box.innerHTML =
-        '<div class="empty-state">No inquiries found.</div>';
+      box.innerHTML = '<div class="empty-state">No inquiries found.</div>';
       return;
     }
 
@@ -853,112 +666,68 @@ document.addEventListener("DOMContentLoaded", () => {
                   <td>${escapeHtml(item.name)}</td>
                   <td>${escapeHtml(item.occasion)}</td>
                   <td>${escapeHtml(item.budget)}</td>
-                  <td>${escapeHtml(
-                    item.preferred_date ||
-                      "-"
-                  )}</td>
+                  <td>${escapeHtml(item.preferred_date || "-")}</td>
                   <td style="min-width:240px">
-                    ${escapeHtml(
-                      item.gift_details
-                    )}
+                    ${escapeHtml(item.gift_details)}
                   </td>
                   <td>
-                    <select data-inquiry-status="${
-                      item.id
-                    }">
-                      ${[
-                        "New",
-                        "Contacted",
-                        "Closed"
-                      ]
+                    <select data-inquiry-status="${item.id}">
+                      ${["New", "Contacted", "Closed"]
                         .map(
                           (status) =>
                             `<option ${
-                              status ===
-                              (item.status ||
-                                "New")
+                              status === (item.status || "New")
                                 ? "selected"
                                 : ""
-                            }>${status}</option>`
+                            }>${status}</option>`,
                         )
                         .join("")}
                     </select>
                   </td>
                 </tr>
-              `
+              `,
             )
             .join("")}
         </tbody>
       </table>
     `;
 
-    box
-      .querySelectorAll(
-        "[data-inquiry-status]"
-      )
-      .forEach((select) => {
-        select.addEventListener(
-          "change",
-          async () => {
-            const { error } =
-              await supabaseClient
-                .from("inquiries")
-                .update({
-                  status: select.value
-                })
-                .eq(
-                  "id",
-                  select.dataset.inquiryStatus
-                );
+    box.querySelectorAll("[data-inquiry-status]").forEach((select) => {
+      select.addEventListener("change", async () => {
+        const { error } = await supabaseClient
+          .from("inquiries")
+          .update({
+            status: select.value,
+          })
+          .eq("id", select.dataset.inquiryStatus);
 
-            if (error) {
-              setMessage(
-                globalMessage,
-                error.message,
-                "error"
-              );
-            } else {
-              setMessage(
-                globalMessage,
-                "Inquiry status updated.",
-                "success"
-              );
+        if (error) {
+          setMessage(globalMessage, error.message, "error");
+        } else {
+          setMessage(globalMessage, "Inquiry status updated.", "success");
 
-              await refreshAll();
-            }
-          }
-        );
+          await refreshAll();
+        }
       });
+    });
   }
 
   function renderCustomers() {
-    const box =
-      document.getElementById(
-        "customersTable"
-      );
+    const box = document.getElementById("customersTable");
 
-    const query =
-      document
-        .getElementById(
-          "customerSearch"
-        )
-        .value
-        .trim()
-        .toLowerCase();
+    const query = document
+      .getElementById("customerSearch")
+      .value.trim()
+      .toLowerCase();
 
-    const data =
-      buildCustomers().filter(
-        (customer) =>
-          `${customer.name} ${
-            customer.phone
-          } ${customer.email}`
-            .toLowerCase()
-            .includes(query)
-      );
+    const data = buildCustomers().filter((customer) =>
+      `${customer.name} ${customer.phone} ${customer.email}`
+        .toLowerCase()
+        .includes(query),
+    );
 
     if (!data.length) {
-      box.innerHTML =
-        '<div class="empty-state">No customers found.</div>';
+      box.innerHTML = '<div class="empty-state">No customers found.</div>';
       return;
     }
 
@@ -983,23 +752,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 <tr>
                   <td>
                     <strong>
-                      ${escapeHtml(
-                        customer.name
-                      )}
+                      ${escapeHtml(customer.name)}
                     </strong>
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      customer.phone
-                    )}
+                    ${escapeHtml(customer.phone)}
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      customer.email ||
-                        "-"
-                    )}
+                    ${escapeHtml(customer.email || "-")}
                   </td>
 
                   <td>
@@ -1007,17 +769,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   </td>
 
                   <td class="customer-total">
-                    ${money(
-                      customer.spent
-                    )}
+                    ${money(customer.spent)}
                   </td>
 
                   <td>
-                    ${escapeHtml(
-                      shortDate(
-                        customer.lastOrder
-                      )
-                    )}
+                    ${escapeHtml(shortDate(customer.lastOrder))}
                   </td>
 
                   <td>
@@ -1028,7 +784,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <a
                               href="${whatsappLink(
                                 customer.phone,
-                                customer.name
+                                customer.name,
                               )}"
                               target="_blank"
                               rel="noopener">
@@ -1043,7 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
                           ? `
                             <a
                               href="mailto:${encodeURIComponent(
-                                customer.email
+                                customer.email,
                               )}">
                               Email
                             </a>
@@ -1053,7 +809,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                   </td>
                 </tr>
-              `
+              `,
             )
             .join("")}
         </tbody>
@@ -1066,83 +822,47 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("productName").value = "";
     document.getElementById("productPrice").value = "";
     document.getElementById("productImage").value = "";
-    document.getElementById("productCategory").value =
-      "birthday";
+    document.getElementById("productCategory").value = "birthday";
     document.getElementById("productBadge").value = "";
-    document.getElementById(
-      "productDescription"
-    ).value = "";
-    document.getElementById(
-      "productActive"
-    ).checked = true;
+    document.getElementById("productDescription").value = "";
+    document.getElementById("productActive").checked = true;
 
-    document.getElementById(
-      "productFormTitle"
-    ).textContent = "Add Product";
+    document.getElementById("productFormTitle").textContent = "Add Product";
 
-    setMessage(
-      document.getElementById(
-        "productMessage"
-      ),
-      ""
-    );
+    setMessage(document.getElementById("productMessage"), "");
   }
 
   function openProductForm(product = null) {
-    document
-      .getElementById("productFormCard")
-      .classList.remove("hidden");
+    document.getElementById("productFormCard").classList.remove("hidden");
 
     if (!product) {
       resetProductForm();
       return;
     }
 
-    document.getElementById(
-      "productFormTitle"
-    ).textContent = "Edit Product";
+    document.getElementById("productFormTitle").textContent = "Edit Product";
 
-    document.getElementById(
-      "productId"
-    ).value = product.id;
+    document.getElementById("productId").value = product.id;
 
-    document.getElementById(
-      "productName"
-    ).value = product.name || "";
+    document.getElementById("productName").value = product.name || "";
 
-    document.getElementById(
-      "productPrice"
-    ).value = product.price || "";
+    document.getElementById("productPrice").value = product.price || "";
 
-    document.getElementById(
-      "productImage"
-    ).value = product.image || "";
+    document.getElementById("productImage").value = product.image || "";
 
-    document.getElementById(
-      "productCategory"
-    ).value =
+    document.getElementById("productCategory").value =
       product.category || "general";
 
-    document.getElementById(
-      "productBadge"
-    ).value = product.badge || "";
+    document.getElementById("productBadge").value = product.badge || "";
 
-    document.getElementById(
-      "productDescription"
-    ).value =
+    document.getElementById("productDescription").value =
       product.description || "";
 
-    document.getElementById(
-      "productActive"
-    ).checked = Boolean(
-      product.active
-    );
+    document.getElementById("productActive").checked = Boolean(product.active);
   }
 
   function closeProductForm() {
-    document
-      .getElementById("productFormCard")
-      .classList.add("hidden");
+    document.getElementById("productFormCard").classList.add("hidden");
 
     resetProductForm();
   }
@@ -1163,9 +883,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       setMessage(
         globalMessage,
-        error.message ||
-          "Could not load admin data.",
-        "error"
+        error.message || "Could not load admin data.",
+        "error",
       );
     }
   }
@@ -1173,326 +892,232 @@ document.addEventListener("DOMContentLoaded", () => {
   /* Navigation / filters */
   document
     .getElementById("salesPeriod")
-    .addEventListener(
-      "change",
-      renderDashboard
-    );
+    .addEventListener("change", renderDashboard);
 
   document
     .getElementById("productSearch")
-    .addEventListener(
-      "input",
-      renderProducts
-    );
+    .addEventListener("input", renderProducts);
 
   document
     .getElementById("orderSearch")
-    .addEventListener(
-      "input",
-      renderOrders
-    );
+    .addEventListener("input", renderOrders);
 
   document
     .getElementById("orderStatusFilter")
-    .addEventListener(
-      "change",
-      renderOrders
-    );
+    .addEventListener("change", renderOrders);
 
   document
     .getElementById("inquirySearch")
-    .addEventListener(
-      "input",
-      renderInquiries
-    );
+    .addEventListener("input", renderInquiries);
 
   document
-    .getElementById(
-      "inquiryStatusFilter"
-    )
-    .addEventListener(
-      "change",
-      renderInquiries
-    );
+    .getElementById("inquiryStatusFilter")
+    .addEventListener("change", renderInquiries);
 
   document
     .getElementById("customerSearch")
-    .addEventListener(
-      "input",
-      renderCustomers
-    );
+    .addEventListener("input", renderCustomers);
 
   document
-    .getElementById(
-      "refreshOrdersBtn"
-    )
-    .addEventListener(
-      "click",
-      refreshAll
-    );
+    .getElementById("refreshOrdersBtn")
+    .addEventListener("click", refreshAll);
 
   document
-    .getElementById(
-      "refreshInquiriesBtn"
-    )
-    .addEventListener(
-      "click",
-      refreshAll
-    );
+    .getElementById("refreshInquiriesBtn")
+    .addEventListener("click", refreshAll);
 
   document
-    .getElementById(
-      "refreshCustomersBtn"
-    )
-    .addEventListener(
-      "click",
-      refreshAll
-    );
+    .getElementById("refreshCustomersBtn")
+    .addEventListener("click", refreshAll);
 
   /* Product form */
   document
     .getElementById("newProductBtn")
-    .addEventListener(
-      "click",
-      () => openProductForm()
-    );
+    .addEventListener("click", () => openProductForm());
 
   document
     .getElementById("cancelProductBtn")
-    .addEventListener(
-      "click",
-      closeProductForm
-    );
+    .addEventListener("click", closeProductForm);
 
   document
     .getElementById("cancelProductBtn2")
-    .addEventListener(
-      "click",
-      closeProductForm
-    );
+    .addEventListener("click", closeProductForm);
 
   document
     .getElementById("productForm")
-    .addEventListener(
-      "submit",
-      async (e) => {
-        e.preventDefault();
-
-        const id =
-          document.getElementById(
-            "productId"
-          ).value;
-
-        const payload = {
-          name: document
-            .getElementById(
-              "productName"
-            )
-            .value.trim(),
-
-          price: Number(
-            document.getElementById(
-              "productPrice"
-            ).value
-          ),
-
-          image: document
-            .getElementById(
-              "productImage"
-            )
-            .value.trim(),
-
-          category:
-            document.getElementById(
-              "productCategory"
-            ).value,
-
-          badge: document
-            .getElementById(
-              "productBadge"
-            )
-            .value.trim(),
-
-          description:
-            document.getElementById(
-              "productDescription"
-            ).value.trim(),
-
-          active:
-            document.getElementById(
-              "productActive"
-            ).checked
-        };
-
-        try {
-          const result = id
-            ? await supabaseClient
-                .from("products")
-                .update(payload)
-                .eq("id", id)
-            : await supabaseClient
-                .from("products")
-                .insert(payload);
-
-          if (result.error) {
-            throw result.error;
-          }
-
-          setMessage(
-            document.getElementById(
-              "productMessage"
-            ),
-            "Product saved.",
-            "success"
-          );
-
-          await refreshAll();
-
-          setTimeout(
-            closeProductForm,
-            500
-          );
-        } catch (error) {
-          setMessage(
-            document.getElementById(
-              "productMessage"
-            ),
-            error.message,
-            "error"
-          );
-        }
-      }
-    );
-
-  /* Login */
-  loginForm.addEventListener(
-    "submit",
-    async (e) => {
+    .addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      if (!supabaseClient) {
+      const id = document.getElementById("productId").value;
+
+      const payload = {
+        name: document.getElementById("productName").value.trim(),
+
+        price: Number(document.getElementById("productPrice").value),
+
+        image: document.getElementById("productImage").value.trim(),
+
+        category: document.getElementById("productCategory").value,
+
+        badge: document.getElementById("productBadge").value.trim(),
+
+        description: document.getElementById("productDescription").value.trim(),
+
+        active: document.getElementById("productActive").checked,
+      };
+
+      try {
+        const result = id
+          ? await supabaseClient.from("products").update(payload).eq("id", id)
+          : await supabaseClient.from("products").insert(payload);
+
+        if (result.error) {
+          throw result.error;
+        }
+
         setMessage(
-          loginMessage,
-          "Configure Supabase in admin.js first.",
-          "error"
+          document.getElementById("productMessage"),
+          "Product saved.",
+          "success",
         );
-        return;
-      }
 
-      setMessage(
-        loginMessage,
-        "Signing in..."
-      );
+        await refreshAll();
 
-      const { error } =
-        await supabaseClient.auth
-          .signInWithPassword({
-            email: document
-              .getElementById(
-                "loginEmail"
-              )
-              .value.trim(),
-
-            password:
-              document.getElementById(
-                "loginPassword"
-              ).value
-          });
-
-      if (error) {
+        setTimeout(closeProductForm, 500);
+      } catch (error) {
         setMessage(
-          loginMessage,
+          document.getElementById("productMessage"),
           error.message,
-          "error"
+          "error",
         );
-        return;
       }
+    });
 
+  /* Login */
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!supabaseClient) {
       setMessage(
         loginMessage,
-        "Signed in.",
-        "success"
+        "Configure Supabase in admin.js first.",
+        "error",
       );
-
-      await boot();
+      return;
     }
-  );
+
+    setMessage(loginMessage, "Signing in...");
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: document.getElementById("loginEmail").value.trim(),
+
+      password: document.getElementById("loginPassword").value,
+    });
+
+    if (error) {
+      setMessage(loginMessage, error.message, "error");
+      return;
+    }
+
+    setMessage(loginMessage, "Signed in.", "success");
+
+    await boot();
+  });
 
   /* Logout */
-  document
-    .getElementById("logoutBtn")
-    .addEventListener(
-      "click",
-      async () => {
-        if (!supabaseClient) return;
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    if (!supabaseClient) return;
 
-        await supabaseClient.auth.signOut();
+    await supabaseClient.auth.signOut();
 
-        dashboardApp.classList.add(
-          "hidden"
-        );
+    dashboardApp.classList.add("hidden");
 
-        loginSection.classList.remove(
-          "hidden"
-        );
+    loginSection.classList.remove("hidden");
 
-        adminEmail.textContent = "";
-      }
-    );
+    adminEmail.textContent = "";
+  });
 
   async function boot() {
     if (!supabaseClient) return;
 
-    const { data } =
-      await supabaseClient.auth
-        .getSession();
+    const { data } = await supabaseClient.auth.getSession();
 
     const session = data.session;
 
     if (!session) {
-      dashboardApp.classList.add(
-        "hidden"
-      );
+      dashboardApp.classList.add("hidden");
 
-      loginSection.classList.remove(
-        "hidden"
-      );
+      loginSection.classList.remove("hidden");
 
       return;
     }
 
-    adminEmail.textContent =
-      session.user.email || "";
+    adminEmail.textContent = session.user.email || "";
 
-    loginSection.classList.add(
-      "hidden"
-    );
+    loginSection.classList.add("hidden");
 
-    dashboardApp.classList.remove(
-      "hidden"
-    );
+    dashboardApp.classList.remove("hidden");
 
     await refreshAll();
   }
 
   if (supabaseClient) {
-    supabaseClient.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session) {
-          adminEmail.textContent =
-            session.user.email || "";
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        adminEmail.textContent = session.user.email || "";
 
-          loginSection.classList.add(
-            "hidden"
-          );
+        loginSection.classList.add("hidden");
 
-          dashboardApp.classList.remove(
-            "hidden"
-          );
-        }
+        dashboardApp.classList.remove("hidden");
       }
-    );
+    });
   }
 
   boot();
+});
+// ================================
+// MOBILE SIDEBAR
+// ================================
+
+const sidebarToggle = document.getElementById("sidebarToggle");
+const sidebar = document.querySelector(".sidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
+const mobileNavItems = document.querySelectorAll(".nav-item");
+
+function openMobileSidebar() {
+  sidebar?.classList.add("mobile-open");
+  sidebarOverlay?.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeMobileSidebar() {
+  sidebar?.classList.remove("mobile-open");
+  sidebarOverlay?.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+sidebarToggle?.addEventListener("click", () => {
+  if (sidebar?.classList.contains("mobile-open")) {
+    closeMobileSidebar();
+  } else {
+    openMobileSidebar();
+  }
+});
+
+sidebarOverlay?.addEventListener("click", closeMobileSidebar);
+
+// Menu item click ke baad sidebar close
+mobileNavItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    if (window.innerWidth <= 700) {
+      closeMobileSidebar();
+    }
+  });
+});
+
+// Screen resize hone par sidebar reset
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 700) {
+    closeMobileSidebar();
+  }
 });
