@@ -416,3 +416,36 @@ button{cursor:pointer}
   .period-bar select{max-width:none}
   .table-tools{grid-template-columns:1fr}
 }
+
+/* COMPACT ADMIN UI */
+.admin-shell{grid-template-columns:220px 1fr}
+.sidebar{padding:18px 14px}
+.brand{padding:2px 6px 22px;gap:9px}
+.brand-mark{width:38px;height:38px;border-radius:10px}
+.brand strong{font-size:21px}
+.sidebar-nav{gap:5px}
+.nav-item{padding:9px 11px;border-radius:9px;font-size:13px}
+.logout-btn{padding:9px 11px;border-radius:9px;font-size:13px}
+.main-content{padding:22px clamp(14px,3vw,32px)}
+.topbar{margin-bottom:18px}
+.topbar h1{font-size:38px}
+.stats-grid{gap:10px;margin:14px 0 16px}
+.stat-card{padding:15px;border-radius:14px}
+.stat-card strong{font-size:24px}
+.panel-card,.login-card{border-radius:14px}
+.panel-card{padding:16px;margin-bottom:14px}
+.dashboard-grid{gap:14px;grid-template-columns:1fr}
+.panel-heading,.section-toolbar{margin-bottom:12px}
+.panel-heading h2,.section-toolbar h2{font-size:27px}
+.period-bar h2{font-size:28px}
+.table-tools{gap:8px;margin-bottom:12px}
+.table th,.table td{padding:9px 8px;font-size:12px}
+.table-actions button,.table-actions a{padding:6px 8px}
+.product-thumb{width:46px;height:46px}
+.admin-form{gap:11px}
+.admin-form input,.admin-form select,.admin-form textarea,.table-tools input,.table-tools select,.period-bar select{padding:9px 11px;border-radius:9px}
+.primary-btn,.secondary-btn,.text-btn,.icon-btn{padding:9px 12px;border-radius:9px}
+.icon-btn{width:34px;height:34px}
+@media(max-width:1000px){
+  .sidebar-nav{gap:5px}
+}
