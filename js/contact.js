@@ -1,38 +1,59 @@
+// ==========================================
+// Glowzy House - Contact / Gift Inquiry JS
+// ==========================================
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("giftInquiryForm");
   const message = document.getElementById("formMessage");
 
+  if (!form) return;
+
+  // ==========================================
+  // CONFIG
+  // ==========================================
+
   const SUPABASE_URL = "https://qugmjqltsqsurqvpjkxg.supabase.co";
 
   const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_OaMCCPC97d20gh9qfRBS3Q_xwm3DJBJ";
+    "sb_publishable_OaMCCPC97d20gh9qfRBS3Q_xwm3DJB";
 
   const EMAIL_SERVICE_ID = "service_7pt9p6a";
   const EMAIL_TEMPLATE_ID = "template_z5l8d8e";
   const EMAIL_PUBLIC_KEY = "NWzVBEpHEcrgFWThl";
 
-  if (!form) return;
+  // ==========================================
+  // EMAILJS INITIALIZATION
+  // ==========================================
 
-  // Initialize EmailJS
   if (window.emailjs) {
     emailjs.init({
       publicKey: EMAIL_PUBLIC_KEY,
     });
   }
 
+  // ==========================================
+  // MESSAGE
+  // ==========================================
+
   function setMessage(text, type = "normal") {
     if (!message) return;
 
     message.textContent = text;
 
+    message.classList.remove("success", "error");
+
     if (type === "success") {
-      message.style.color = "#3e7d58";
-    } else if (type === "error") {
-      message.style.color = "#b54e4e";
-    } else {
-      message.style.color = "";
+      message.classList.add("success");
+    }
+
+    if (type === "error") {
+      message.classList.add("error");
     }
   }
+
+  // ==========================================
+  // SUPABASE
+  // ==========================================
 
   async function saveInquiryToSupabase(inquiry) {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/inquiries`, {
@@ -67,6 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ==========================================
+  // FORM SUBMIT
+  // ==========================================
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -88,15 +113,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const giftDetails = data.get("message")?.toString().trim() || "";
 
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
     if (!name || !phone || !occasion || !budget || !giftDetails) {
       setMessage("Please fill in all required details.", "error");
+
       return;
     }
 
+    // Basic phone validation
+    const phoneDigits = phone.replace(/\D/g, "");
+
+    if (phoneDigits.length < 10) {
+      setMessage("Please enter a valid phone number.", "error");
+
+      return;
+    }
+
+    // Email validation only if provided
+    if (email) {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailPattern.test(email)) {
+        setMessage("Please enter a valid email address.", "error");
+
+        return;
+      }
+    }
+
+    // ==========================================
+    // BUTTON STATE
+    // ==========================================
+
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = "Sending...";
+
+      submitButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
     }
+
+    // ==========================================
+    // SUPABASE DATA
+    // ==========================================
 
     const inquiryData = {
       name: name,
@@ -109,6 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
       status: "New",
     };
 
+    // ==========================================
+    // EMAILJS DATA
+    // ==========================================
+
     const emailParams = {
       name: name,
       phone: phone,
@@ -119,8 +183,12 @@ document.addEventListener("DOMContentLoaded", () => {
       gift_details: giftDetails,
     };
 
+    // ==========================================
+    // SEND
+    // ==========================================
+
     try {
-      // 1. Save inquiry to Supabase
+      // 1. Save inquiry
       await saveInquiryToSupabase(inquiryData);
 
       // 2. Send email notification
@@ -131,6 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
           console.error("EmailJS Error:", emailError);
         }
       }
+
+      // ==========================================
+      // SUCCESS
+      // ==========================================
 
       form.reset();
 

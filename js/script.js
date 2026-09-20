@@ -1,167 +1,230 @@
+/// ==============================
+// GLOWZY HOUSE
 // ==============================
-// Glowzy House
-// script.js
-// ==============================
 
-// Navbar Shadow
+document.addEventListener("DOMContentLoaded", () => {
+  /* =========================
+       NAVBAR SHADOW
+    ========================= */
 
-const header = document.querySelector("header");
+  const header = document.querySelector("header");
 
-window.addEventListener("scroll", () => {
-  if (header) {
+  function updateHeaderShadow() {
+    if (!header) return;
+
     header.style.boxShadow =
       window.scrollY > 50 ? "0 10px 25px rgba(0,0,0,.08)" : "none";
   }
-});
 
-// Fade Animation
+  window.addEventListener("scroll", updateHeaderShadow);
+  updateHeaderShadow();
 
-const sections = document.querySelectorAll("section");
+  /* =========================
+       MOBILE MENU
+    ========================= */
 
-if (sections.length) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-        }
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navMenu = document.querySelector(".nav-menu");
+
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navMenu.classList.toggle("active");
+
+      menuToggle.setAttribute("aria-expanded", isOpen);
+
+      menuToggle.innerHTML = isOpen
+        ? '<i class="fa-solid fa-xmark"></i>'
+        : '<i class="fa-solid fa-bars"></i>';
+    });
+
+    // Close menu after clicking a link
+    navMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("active");
+
+        menuToggle.setAttribute("aria-expanded", "false");
+
+        menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
       });
-    },
-    { threshold: 0.2 },
-  );
+    });
 
-  sections.forEach((section) => observer.observe(section));
-}
+    // Close menu when clicking outside
+    document.addEventListener("click", (event) => {
+      if (
+        !navMenu.contains(event.target) &&
+        !menuToggle.contains(event.target)
+      ) {
+        navMenu.classList.remove("active");
 
-// Hero Image Effect
+        menuToggle.setAttribute("aria-expanded", "false");
 
-const heroImage = document.querySelector(".hero-image img");
+        menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      }
+    });
+  }
 
-if (heroImage) {
-  heroImage.addEventListener("mouseenter", () => {
-    heroImage.style.transform = "scale(1.03)";
+  /* =========================
+       FADE ANIMATION
+    ========================= */
+
+  const sections = document.querySelectorAll("section");
+
+  if (sections.length && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  /* =========================
+       HERO IMAGE
+    ========================= */
+
+  const heroImage = document.querySelector(".hero-image img");
+
+  if (heroImage) {
+    heroImage.addEventListener("mouseenter", () => {
+      heroImage.style.transform = "scale(1.03)";
+    });
+
+    heroImage.addEventListener("mouseleave", () => {
+      heroImage.style.transform = "scale(1)";
+    });
+  }
+
+  /* =========================
+       WISHLIST
+    ========================= */
+
+  document.querySelectorAll(".wishlist").forEach((heart) => {
+    heart.addEventListener("click", () => {
+      heart.classList.toggle("fa-regular");
+      heart.classList.toggle("fa-solid");
+      heart.classList.toggle("active");
+    });
   });
 
-  heroImage.addEventListener("mouseleave", () => {
-    heroImage.style.transform = "scale(1)";
-  });
-}
+  /* =========================
+       CURRENT YEAR
+    ========================= */
 
-// Wishlist
+  const year = document.getElementById("year");
 
-document.querySelectorAll(".wishlist").forEach((heart) => {
-  heart.addEventListener("click", () => {
-    heart.classList.toggle("fa-regular");
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
 
-    heart.classList.toggle("fa-solid");
+  /* =========================
+       CART COUNT
+    ========================= */
 
-    heart.classList.toggle("active");
-  });
-});
-
-// Current Year
-
-const year = document.getElementById("year");
-
-if (year) {
-  year.textContent = new Date().getFullYear();
-}
-
-console.log("Glowzy House Loaded Successfully ✨");
-// ==============================
-// HOME PAGE - ADD TO CART
-// ==============================
-
-document.querySelectorAll(".home-cart-btn").forEach((button) => {
-  button.addEventListener("click", function () {
-    const product = {
-      name: this.dataset.name,
-      price: Number(this.dataset.price),
-      image: this.dataset.image,
-      quantity: 1,
-    };
-
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    const existingProduct = cart.find((item) => item.name === product.name);
-
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      cart.push(product);
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    // Update cart count
-    const cartCount = document.querySelector(".cart-count");
-
-    if (cartCount) {
-      const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-
-      cartCount.textContent = totalItems;
-    }
-
-    // Button feedback
-    const originalText = this.textContent;
-
-    this.textContent = "Added ✓";
-
-    setTimeout(() => {
-      this.textContent = originalText;
-    }, 1500);
-  });
-});
-
-
-/* =========================================================
-   GLOWZY HOUSE — UX UPGRADE
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Keep cart count correct after refresh.
-  const updateCartCount = () => {
+  function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalItems = cart.reduce((total, item) => total + Number(item.quantity || 0), 0);
-    document.querySelectorAll(".cart-count").forEach(el => {
+
+    const totalItems = cart.reduce(
+      (total, item) => total + Number(item.quantity || 0),
+      0,
+    );
+
+    document.querySelectorAll(".cart-count").forEach((el) => {
       el.textContent = totalItems;
     });
-  };
+  }
 
   updateCartCount();
 
-  // Small success toast for home-page cart buttons.
-  document.querySelectorAll(".home-cart-btn").forEach(button => {
-    button.addEventListener("click", () => {
+  /* =========================
+       HOME ADD TO CART
+    ========================= */
+
+  document.querySelectorAll(".home-cart-btn").forEach((button) => {
+    button.addEventListener("click", function () {
+      const product = {
+        name: this.dataset.name,
+        price: Number(this.dataset.price),
+        image: this.dataset.image,
+        quantity: 1,
+      };
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const existingProduct = cart.find((item) => item.name === product.name);
+
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+      } else {
+        cart.push(product);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+
       updateCartCount();
 
-      const card = button.closest(".product-card");
+      /* Button feedback */
+
+      const originalText = this.textContent;
+
+      this.textContent = "Added ✓";
+      this.disabled = true;
+
+      setTimeout(() => {
+        this.textContent = originalText;
+        this.disabled = false;
+      }, 1200);
+
+      /* Toast */
+
+      const card = this.closest(".product-card");
+
       const name = card?.querySelector("h3")?.textContent?.trim() || "Gift";
 
       let toast = document.querySelector(".gh-toast");
+
       if (!toast) {
         toast = document.createElement("div");
+
         toast.className = "gh-toast";
+
         toast.setAttribute("role", "status");
+
         document.body.appendChild(toast);
       }
 
       toast.textContent = `${name} added to your cart ✓`;
+
       toast.classList.add("show");
 
       clearTimeout(window.ghToastTimer);
-      window.ghToastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+
+      window.ghToastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
     });
   });
 
-  // Make the search icon useful without changing the existing search system.
+  /* =========================
+       SEARCH ICON
+    ========================= */
+
   const searchLink = document.querySelector('.nav-icons a[href="#"]');
-  if (searchLink && !searchLink.dataset.searchReady) {
-    searchLink.dataset.searchReady = "true";
+
+  if (searchLink) {
     searchLink.addEventListener("click", (event) => {
       event.preventDefault();
+
       window.location.href = "shop.html";
     });
+
     searchLink.setAttribute("aria-label", "Search gifts");
   }
 });
+
+console.log("Glowzy House Loaded Successfully ✨");

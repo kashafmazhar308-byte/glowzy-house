@@ -40,7 +40,9 @@
 
 
             <div class="nav-icons">
-
+<a href="shop.html" aria-label="Search gifts">
+    <i class="fa-solid fa-magnifying-glass"></i>
+</a>
 
                 <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-count">0</span>
@@ -55,6 +57,13 @@
 
             </div>
 
+<button
+    class="menu-toggle"
+    type="button"
+    aria-label="Open menu"
+    aria-expanded="false">
+    <i class="fa-solid fa-bars"></i>
+</button>
 
 </nav>
 
@@ -96,25 +105,36 @@
         <form id="giftInquiryForm">
             <div class="form-row">
                 <label> Your Name
-                    <input type="text" name="name" placeholder="Your name" required>
+                    <input
+    type="text"
+    name="name"
+    placeholder="Your name"
+    autocomplete="name"
+    required
+>
                 </label>
-                <label>
-    Phone Number
+                <label> phone Number
     <input
-        type="tel"
-        name="phone"
-        placeholder="03XX-XXXXXXX"
-        required
-    >
+    type="tel"
+    name="phone"
+    placeholder="03XX-XXXXXXX"
+    inputmode="tel"
+    autocomplete="tel"
+    minlength="10"
+    maxlength="15"
+    required
+>
 </label>
 
 <label>
     Email Address
     <input
-        type="email"
-        name="email"
-        placeholder="your@email.com"
-    >
+    type="email"
+    name="email"
+    placeholder="your@email.com"
+    autocomplete="email"
+>
+
 </label>
                 <label> Occasion
                     <select name="occasion" required>
@@ -164,24 +184,6 @@
     </div>
     <a href="shop.html" class="cta-button">Browse Gifts <i class="fa-solid fa-arrow-right"></i></a>
 </section>
-
-<section class="contact-section">
-
-<div class="contact-info">
-
-<h2>Get In Touch</h2>
-
-<p><i class="fa-solid fa-location-dot"></i> Lahore, Pakistan</p>
-
-<p><i class="fa-solid fa-envelope"></i> <a href="mailto:glowzyhouse.pk@gmail.com">glowzyhouse.pk@gmail.com</a></p>
-<p>
-We are always happy to help you choose the perfect luxury gift hamper.
-</p>
-
-</div>
-<img src="images/logo.jpg" alt="Glowzy House Logo" class="contact-image" width="400" height="400">
-</section>
-
 
 
 <footer class="footer">
@@ -257,10 +259,9 @@ We are always happy to help you choose the perfect luxury gift hamper.
     </div>
 
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="js/contact.js"></script>
 <script src="js/script.js"></script>
+<script src="js/contact.js"></script>
 
 </body>
 </html>
