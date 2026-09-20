@@ -4191,3 +4191,174 @@ FOOTER POLICY LINKS
     padding-top: 100px !important;
   }
 }
+/* ==========================================
+   GLOWZY HOUSE - SHOP MOBILE HEADER FIX
+========================================== */
+
+@media (max-width: 768px) {
+  header {
+    width: 100% !important;
+    height: 70px !important;
+    padding: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  header .navbar {
+    width: 100% !important;
+    height: 70px !important;
+    min-height: 70px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+
+    padding: 0 16px !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+
+  header .logo {
+    font-size: 25px !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  header .nav-menu {
+    display: none !important;
+  }
+
+  header .nav-icons {
+    display: flex !important;
+    align-items: center !important;
+
+    margin-left: auto !important;
+    margin-right: 10px !important;
+
+    gap: 12px !important;
+  }
+
+  header .nav-icons a {
+    font-size: 17px !important;
+    margin: 0 !important;
+  }
+
+  /* HAMBURGER */
+
+  header .menu-toggle {
+    display: flex !important;
+
+    width: 40px !important;
+    height: 40px !important;
+
+    flex: 0 0 40px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 1px solid #eadfd5 !important;
+    border-radius: 50% !important;
+
+    background: #ffffff !important;
+    color: #4a3728 !important;
+
+    font-size: 18px !important;
+  }
+
+  /* MOBILE MENU */
+
+  header .nav-menu.active {
+    display: flex !important;
+
+    position: absolute !important;
+
+    top: 70px !important;
+    left: 12px !important;
+    right: 12px !important;
+
+    width: auto !important;
+
+    flex-direction: column !important;
+
+    padding: 8px 0 !important;
+    margin: 0 !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #eadfd5 !important;
+    border-radius: 16px !important;
+
+    box-shadow: 0 12px 30px rgba(59, 46, 38, 0.12) !important;
+
+    z-index: 9999 !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+
+  header .nav-menu.active li {
+    width: 100% !important;
+  }
+
+  header .nav-menu.active a {
+    display: block !important;
+
+    width: 100% !important;
+
+    padding: 14px 20px !important;
+
+    text-align: center !important;
+  }
+
+  /* SHOP CONTENT STARTS BELOW FIXED HEADER */
+
+  .shop-hero {
+    margin-top: 70px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    height: 66px !important;
+  }
+
+  header .navbar {
+    height: 66px !important;
+    min-height: 66px !important;
+    padding: 0 14px !important;
+  }
+
+  header .logo {
+    font-size: 23px !important;
+  }
+
+  header .nav-icons {
+    gap: 9px !important;
+    margin-right: 8px !important;
+  }
+
+  header .nav-icons a {
+    font-size: 16px !important;
+  }
+
+  header .menu-toggle {
+    width: 38px !important;
+    height: 38px !important;
+    flex-basis: 38px !important;
+    font-size: 17px !important;
+  }
+
+  header .nav-menu.active {
+    top: 66px !important;
+  }
+
+  .shop-hero {
+    margin-top: 66px !important;
+  }
+}
