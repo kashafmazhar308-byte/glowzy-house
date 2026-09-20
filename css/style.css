@@ -3992,3 +3992,210 @@ FOOTER POLICY LINKS
     height: 290px;
   }
 }
+/* ==========================================
+   GLOWZY HOUSE - MOBILE HEADER FINAL FIX
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* ---------- HEADER ---------- */
+
+  header,
+  .header {
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ---------- NAVBAR ---------- */
+
+  .navbar {
+    width: 100%;
+    min-height: 72px !important;
+    height: 72px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    padding: 10px 20px !important;
+    margin: 0 !important;
+
+    gap: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* ---------- LOGO ---------- */
+
+  .logo {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 27px !important;
+    line-height: 1 !important;
+
+    white-space: nowrap;
+  }
+
+  /* ---------- DESKTOP MENU ---------- */
+
+  .nav-menu {
+    display: none !important;
+  }
+
+  /* ---------- CART + WISHLIST ---------- */
+
+  .nav-icons {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    gap: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .nav-icons a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 19px !important;
+  }
+
+  /* ---------- HAMBURGER ---------- */
+
+  .menu-toggle,
+  .hamburger,
+  .mobile-menu-toggle {
+    display: flex !important;
+
+    width: 42px !important;
+    height: 42px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 1px solid #eadfd2 !important;
+    border-radius: 50% !important;
+
+    background: #fffdf9 !important;
+
+    color: #493b32 !important;
+
+    font-size: 20px !important;
+    line-height: 1 !important;
+
+    box-shadow: 0 2px 8px rgba(80, 60, 40, 0.06);
+
+    cursor: pointer;
+  }
+
+  /* Make hamburger stay on same row */
+  .navbar .menu-toggle,
+  .navbar .hamburger,
+  .navbar .mobile-menu-toggle {
+    position: static !important;
+    transform: none !important;
+  }
+
+  /* ---------- HERO ---------- */
+
+  .hero {
+    margin-top: 0 !important;
+    padding-top: 45px !important;
+  }
+
+  .hero-section {
+    margin-top: 0 !important;
+    padding-top: 45px !important;
+  }
+
+  /* Remove accidental huge top spacing */
+  .hero-content {
+    margin-top: 0 !important;
+  }
+
+  /* ---------- MOBILE MENU WHEN OPEN ---------- */
+
+  .nav-menu.active,
+  .nav-menu.show,
+  .mobile-menu.active {
+    display: flex !important;
+
+    position: absolute !important;
+    top: 72px !important;
+    left: 15px !important;
+    right: 15px !important;
+
+    width: auto !important;
+
+    flex-direction: column !important;
+    align-items: center !important;
+
+    padding: 18px !important;
+    margin: 0 !important;
+
+    background: #fffdf9 !important;
+
+    border: 1px solid #eadfd2 !important;
+    border-radius: 16px !important;
+
+    box-shadow: 0 10px 30px rgba(80, 60, 40, 0.12);
+
+    z-index: 9999 !important;
+  }
+
+  .nav-menu.active a,
+  .nav-menu.show a,
+  .mobile-menu.active a {
+    padding: 10px 15px !important;
+  }
+}
+
+/* ==========================================
+   SMALL PHONES
+   ========================================== */
+
+@media (max-width: 480px) {
+  .navbar {
+    min-height: 68px !important;
+    height: 68px !important;
+
+    padding: 9px 16px !important;
+  }
+
+  .logo {
+    font-size: 24px !important;
+  }
+
+  .nav-icons {
+    gap: 10px !important;
+  }
+
+  .nav-icons a {
+    font-size: 17px !important;
+  }
+
+  .menu-toggle,
+  .hamburger,
+  .mobile-menu-toggle {
+    width: 38px !important;
+    height: 38px !important;
+
+    font-size: 18px !important;
+  }
+
+  .hero,
+  .hero-section {
+    padding-top: 35px !important;
+  }
+}
